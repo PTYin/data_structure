@@ -23,7 +23,7 @@ namespace pty
         {
             this->push_front(_data);
         }
-        T push_all(std::initializer_list<T> list)
+        void push_all(std::initializer_list<T> list)
         {
             for(auto element:list)
             {

@@ -21,7 +21,7 @@ namespace pty
         {
             this->push_back(_data);
         }
-        T push_all(std::initializer_list<T> list)
+        void push_all(std::initializer_list<T> list)
         {
             for(auto element:list)
             {
@@ -30,7 +30,7 @@ namespace pty
         }
         T pop()  // 弹出
         {
-            this->pop_back();
+            return this->pop_back();
         }
         T top() const  // 获得栈顶元素
         {

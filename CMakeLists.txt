@@ -4,5 +4,5 @@ project(data_structure)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SRC main.cpp doubleLinkedList.hpp stack.hpp queue.hpp)
+set(SRC main.cpp doubleLinkedList.hpp stack.hpp queue.hpp heap.hpp)
 add_executable(usage ${SRC})

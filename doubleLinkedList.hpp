@@ -175,12 +175,21 @@ namespace pty
         {
             if(length==0)
                 throw "No element in list!";
+            else if(length == 1)
+            {
+                length = 0;
+                T temp = *it_head;
+                delete it_head.pt;
+                it_head.pt = it_tail.pt = nullptr;
+                return temp;
+            }
             else
             {
                 length--;
                 T temp = *it_head;
-                delete it_head.pt;
+                Node* temp_pt = it_head.pt;
                 (++it_head).pt->prev = nullptr;
+                delete temp_pt;
                 return temp;
             }
         }
@@ -200,12 +209,21 @@ namespace pty
         {
             if(length==0)
                 throw "No element in list!";
+            else if(length == 1)
+            {
+                length = 0;
+                T temp = *it_head;
+                delete it_head.pt;
+                it_head.pt = it_tail.pt = nullptr;
+                return temp;
+            }
             else
             {
                 length--;
                 T temp = *it_tail;
-                delete it_tail.pt;
+                Node* temp_pt = it_tail.pt;
                 (--it_tail).pt->next = nullptr;
+                delete temp_pt;
                 return temp;
             }
         }

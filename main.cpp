@@ -1,6 +1,7 @@
 #include "doubleLinkedList.hpp"
 #include "stack.hpp"
 #include "queue.hpp"
+#include "heap.hpp"
 
 using namespace pty;
 using std::cout;
@@ -9,13 +10,36 @@ using std::endl;
 void doubleLinkedList_test();
 void stack_test();
 void queue_test();
+void heap_test();
 int main()
 {
     doubleLinkedList_test();
     cout<<"##########################"<<endl;
     stack_test();
+    cout<<"##########################"<<endl;
     queue_test();
+    cout<<"##########################"<<endl;
+    heap_test();
     return 0;
+}
+void heap_test()
+{
+    heap<int> h1;
+    int array[] = {3, 5, 1, 4, 100, 43, 0x7fffffff, 12113, 12, 12, 1, 1, 33, 912};
+    h1.heapify(array, sizeof(array) / sizeof(int));  // 从一个无序数组以O(n)时间复杂度建堆
+    while(!h1.is_empty())
+        cout<<h1.pop()<<" ";
+    cout << endl;
+    heap<std::string> h2(100, [](std::string string1, std::string string2) -> bool  // 比较器选择大的为优先级较高
+    {
+        return string1 >= string2;
+    });
+    h2.insert("aaa");
+    h2.insert("bbb");
+    h2.insert("ccc");
+    cout<<h2<<endl;
+    while (!h2.is_empty())
+        cout<<h2.pop()<<" ";
 }
 void doubleLinkedList_test()
 {
