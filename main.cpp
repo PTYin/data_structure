@@ -1,7 +1,10 @@
+#include <cstring>
+
 #include "doubleLinkedList.hpp"
 #include "stack.hpp"
 #include "queue.hpp"
 #include "heap.hpp"
+#include "quick_sort.hpp"
 
 using namespace pty;
 using std::cout;
@@ -11,17 +14,50 @@ void doubleLinkedList_test();
 void stack_test();
 void queue_test();
 void heap_test();
+void quick_sort_test();
 int main()
 {
     doubleLinkedList_test();
-    cout<<"##########################"<<endl;
+    cout<<"stack:##########################"<<endl;
     stack_test();
-    cout<<"##########################"<<endl;
+    cout<<"queue:##########################"<<endl;
     queue_test();
-    cout<<"##########################"<<endl;
+    cout<<"heap:##########################"<<endl;
     heap_test();
+    cout<<"quick_sort##########################"<<endl;
+    quick_sort_test();
     return 0;
 }
+
+void quick_sort_test()
+{
+    int array[] = {3, 5, 1, 4, 100, 43, 0x7fffffff, 12113, 12, 12, 1, 1, 33, 912};
+    // 用递归实现快排
+    quick_sort_recursive<int>(array, 0, sizeof(array) / sizeof(int) - 1);
+    cout<<"!!!Recursive Quick Sort:";
+    for (int i : array)
+        cout<< i <<" ";
+
+    cout<<endl<<"!!!Quick Sort Using Stack:";
+    const char* char_array[] = {"I love programming!", "aaa", "aaaa", "aaaaaaaaaaaaaa", "aaaa"};
+    // 用栈实现快排
+    quick_sort_stack<const char*>(char_array, 0, sizeof(char_array) / sizeof(const char*) - 1, [](const char* e1, const char* e2) -> bool
+    {
+        return strlen(e1) < strlen(e2);
+    });
+    for (const char* i : char_array)
+        cout<< i <<" ";
+
+    cout<<endl<<"!!!Quick Sort Using Queue:";
+    double double_array[] = {1.0, 3.1, 0.4444, 121.21, 21.0, 12, 12901, 101010, 3.1415926535};
+    quick_sort_queue<double>(double_array, 0, sizeof(double_array) / sizeof(double) - 1, [](double e1, double e2) -> bool
+    {
+        return  e1 > e2;
+    });
+    for (double value : double_array)
+        cout<<value<<" ";
+}
+
 void heap_test()
 {
     heap<int> h1;
@@ -40,6 +76,7 @@ void heap_test()
     cout<<h2<<endl;
     while (!h2.is_empty())
         cout<<h2.pop()<<" ";
+    cout<<endl;
 }
 void doubleLinkedList_test()
 {
