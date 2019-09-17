@@ -320,6 +320,13 @@ namespace pty
             it_node.pt->prev = node_ptr;
             length++;
         }
+        doubleLinkedList& operator=(const doubleLinkedList& other)
+        {
+            clear();
+            for(auto element:other)
+                push_back(element);
+            return *this;
+        }
         friend std::ostream& operator<<(std::ostream& io, const doubleLinkedList& linkedList)  // 打印链表
         {
             io<<"NULL"<<" <-> ";
