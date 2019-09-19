@@ -2,8 +2,8 @@
 // Created by peter on 19-9-7.
 //
 
-#ifndef DATA_STRUCTURE_190905_QUEUE_HPP
-#define DATA_STRUCTURE_190905_QUEUE_HPP
+#ifndef DATA_STRUCTURE_QUEUE_HPP
+#define DATA_STRUCTURE_QUEUE_HPP
 
 #include "doubleLinkedList.hpp"
 namespace pty
@@ -68,4 +68,4 @@ namespace pty
     };
 }
 
-#endif //DATA_STRUCTURE_190905_QUEUE_HPP
+#endif //DATA_STRUCTURE_QUEUE_HPP

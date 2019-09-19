@@ -5,6 +5,7 @@
 #include "queue.hpp"
 #include "heap.hpp"
 #include "quick_sort.hpp"
+#include "binaryTree.hpp"
 
 using namespace pty;
 using std::cout;
@@ -15,18 +16,46 @@ void stack_test();
 void queue_test();
 void heap_test();
 void quick_sort_test();
+void binaryTree_test();
 int main()
 {
+    cout<<endl<<"doubleLinkedList:##########################"<<endl;
     doubleLinkedList_test();
-    cout<<"stack:##########################"<<endl;
+    cout<<endl<<"stack:##########################"<<endl;
     stack_test();
-    cout<<"queue:##########################"<<endl;
+    cout<<endl<<"queue:##########################"<<endl;
     queue_test();
-    cout<<"heap:##########################"<<endl;
+    cout<<endl<<"heap:##########################"<<endl;
     heap_test();
-    cout<<"quick_sort##########################"<<endl;
+    cout<<endl<<"quick_sort:##########################"<<endl;
     quick_sort_test();
+    cout<<endl<<"binaryTree:##########################"<<endl;
+    binaryTree_test();
     return 0;
+}
+
+void binaryTree_test()
+{
+    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    int pre_order[] = {1, 2, 4, 5, 3, 6, 7, 8};
+    int in_order[] = {4, 2, 5, 1, 7, 6, 8, 3};
+    int post_order[] = {4, 5, 2, 7, 8, 6, 3, 1};
+    // 由前序和中序构造树
+    binaryTree<int> binaryTree_from_pre_in(8, values, in_order, pre_order);
+    cout << binaryTree_from_pre_in;
+    cout<<endl<<"-----------------------------"<<endl;
+    // 由后序和中序构造树
+    binaryTree<int> binaryTree_from_post_in(8, values, in_order, nullptr, post_order);
+    cout << binaryTree_from_post_in<<endl;
+    //  前序遍历
+    binaryTree_from_pre_in.traversal_pre();
+    cout<<endl;
+    //  中序遍历
+    binaryTree_from_pre_in.traversal_in();
+    cout<<endl;
+    //  后序遍历
+    binaryTree_from_pre_in.traversal_post();
+    cout<<endl;
 }
 
 void quick_sort_test()
@@ -56,6 +85,7 @@ void quick_sort_test()
     });
     for (double value : double_array)
         cout<<value<<" ";
+    cout<<endl;
 }
 
 void heap_test()

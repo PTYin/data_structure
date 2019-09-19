@@ -2,8 +2,8 @@
 // Created by peter on 19-9-6.
 //
 
-#ifndef DATA_STRUCTURE_190905_STACK_HPP
-#define DATA_STRUCTURE_190905_STACK_HPP
+#ifndef DATA_STRUCTURE_STACK_HPP
+#define DATA_STRUCTURE_STACK_HPP
 
 #include "doubleLinkedList.hpp"
 
@@ -62,4 +62,4 @@ namespace pty
     };
 }
 
-#endif //DATA_STRUCTURE_190905_STACK_HPP
+#endif //DATA_STRUCTURE_STACK_HPP
