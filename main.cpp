@@ -36,25 +36,37 @@ int main()
 
 void binaryTree_test()
 {
-    int values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    //  规定标号为i的节点的值为values[i]
+    char values[] = {0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
     int pre_order[] = {1, 2, 4, 5, 3, 6, 7, 8};
     int in_order[] = {4, 2, 5, 1, 7, 6, 8, 3};
     int post_order[] = {4, 5, 2, 7, 8, 6, 3, 1};
     // 由前序和中序构造树
-    binaryTree<int> binaryTree_from_pre_in(8, values, in_order, pre_order);
+    binaryTree<char> binaryTree_from_pre_in(8, values, in_order, pre_order);
     cout << binaryTree_from_pre_in;
     cout<<endl<<"-----------------------------"<<endl;
     // 由后序和中序构造树
-    binaryTree<int> binaryTree_from_post_in(8, values, in_order, nullptr, post_order);
+    binaryTree<char> binaryTree_from_post_in(8, values, in_order, nullptr, post_order);
     cout << binaryTree_from_post_in<<endl;
+    cout<<endl<<(binaryTree_from_pre_in == binaryTree_from_post_in?"Two Trees Are Same!":"Two Trees Are Different!")<<endl;
     //  前序遍历
-    binaryTree_from_pre_in.traversal_pre();
+    cout<<"DLR:  ";
+
+    auto fun = [](binaryTree<char>::Node* node){std::cout<<node->get();};
+
+    binaryTree_from_pre_in.traversal_pre(fun);
     cout<<endl;
     //  中序遍历
-    binaryTree_from_pre_in.traversal_in();
+    cout<<"LDR:  ";
+    binaryTree_from_pre_in.traversal_in(fun);
     cout<<endl;
     //  后序遍历
-    binaryTree_from_pre_in.traversal_post();
+    cout<<"LRD:  ";
+    binaryTree_from_pre_in.traversal_post(fun);
+    cout<<endl;
+    //  层次遍历
+    cout<<"Lev:  ";
+    binaryTree_from_pre_in.traversal_level(fun);
     cout<<endl;
 }
 

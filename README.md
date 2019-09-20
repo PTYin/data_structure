@@ -4,6 +4,7 @@
     #include "queue.hpp"
     #include "heap.hpp"
     #include "quick_sort.hpp"
+    #include "binaryTree.hpp"
 
 # Test
     mkdir build

@@ -7,13 +7,29 @@
 
 #include <iostream>
 #include "stack.hpp"
+#include "queue.hpp"
 
 namespace pty
 {
+    /*
+     * 二叉树类型
+     * 支持操作包括：
+     * 1.   从前序、后序中的一个和中序序列构建树
+     * 2.   插入到某节点的左或右儿子节点处
+     * 3.   删除以位置node节点为根的子树，并返回该子树原先的规模
+     * 4.   将以node节点为根节点的子树从当前树种摘除，并将其转换为一棵独立的树
+     * 5.   返回大小
+     * 6.   返回是否为空
+     * 7.   重载==运算符，比较两棵树
+     * 8.   以凸入表示法打印树*/
     template <typename T>
     class binaryTree
     {
     public:
+        /*
+         * 节点类
+         * 重载比较运算符
+         * 接口包括前序、中序、后序、层次遍历以该节点为根节点的子树，并对每个节点执行回调函数*/
         class Node
         {
             friend class binaryTree;
@@ -26,7 +42,8 @@ namespace pty
             explicit Node(T _value, Node* _father=nullptr, Node* _left_child=nullptr, Node* _right_child=nullptr):
                     value(_value),father(_father),left_child(_left_child),right_child(_right_child){}
             // 以该节点为根节点进行遍历（前序、中序、后序）
-            void traversal(void (*callback)(Node*), int type)
+            template <typename F>
+            void traversal(F const &callback, int type)
             {
                 stack<Node *>container({this});
                 stack<Node *>visted;
@@ -56,28 +73,42 @@ namespace pty
             }
 
         public:
-            T get(){ return value;}
-            bool operator<(const Node& other){ return value < other.value;}
-            bool operator<=(const Node& other){ return value <= other.value;}
-            bool operator>(const Node& other){ return value > other.value;}
-            bool operator>=(const Node& other){ return value >= other.value;}
-            bool operator==(const Node& other){return value == other.value;}
-            bool operator!=(const Node& other){return value != other.value;}
-            void traversal_pre(void (*callback)(Node*)){traversal(callback, 0);}
-            void traversal_in(void (*callback)(Node*)){traversal(callback, 1);}
-            void traversal_post(void (*callback)(Node*)){traversal(callback, 2);}
+            T get() const { return value;}
+            bool operator<(const Node& other) const { return value < other.value;}
+            bool operator<=(const Node& other) const { return value <= other.value;}
+            bool operator>(const Node& other) const { return value > other.value;}
+            bool operator>=(const Node& other) const { return value >= other.value;}
+            bool operator==(const Node& other) const {return value == other.value;}
+            bool operator!=(const Node& other) const {return value != other.value;}
+            // 以该节点为根节点进行前序遍历
+            template <typename F>
+            void traversal_pre(F const &callback){traversal(callback, 0);}
+            // 以该节点为根节点进行中序遍历
+            template <typename F>
+            void traversal_in(F const &callback){traversal(callback, 1);}
+            // 以该节点为根节点进行后序遍历
+            template <typename F>
+            void traversal_post(F const &callback){traversal(callback, 2);}
+            // 以该节点为根节点进行层次遍历
+            template <typename F>
+            void traversal_level(F const &callback)
+            {
+                queue<Node*> container({this});
+                while (!container.is_empty())
+                {
+                    Node* node = container.pop();
+                    if(node == nullptr)
+                        continue;
+                    callback(node);
+                    container.push(node->left_child);
+                    container.push((node->right_child));
+                }
+            }
         };
 
-    protected:
-        // 根节点
-        Node* root;
-        const T* values;
-        const int* in_order;
-        const int* pre_order;
-        const int* post_order;
-        int n;
+    private:
         // 递归以凸入表示法打印树
-        void printTree(std::ostream& o, Node* node, int indent, bool left) const
+        void print_tree(std::ostream& o, Node* node, int indent, bool left) const
         {
             if(node == nullptr || !n)
                 return;
@@ -88,9 +119,17 @@ namespace pty
             else
                 left ? o << "left: " : o << "right:";
             o<<node->value<<std::endl;
-            printTree(o, node->left_child, indent+1, true);
-            printTree(o, node->right_child, indent+1, false);
+            print_tree(o, node->left_child, indent + 1, true);
+            print_tree(o, node->right_child, indent + 1, false);
         }
+    protected:
+        // 根节点
+        Node* root;
+        const T* values;
+        const int* in_order;
+        const int* pre_order;
+        const int* post_order;
+        int n;
         // 从中序和前序构造
         void build_from_in_pre(bool left, Node* fa, int root_pre, int begin_in, int end_in)
         {
@@ -173,10 +212,10 @@ namespace pty
             int count = 0;
             node->father->left_child == node?node->father->left_child = nullptr:node->father->right_child = nullptr;
             node->traversal_post([&count](Node* node)
-                                {
-                                    delete(node);
-                                    count++;
-                                });
+                                 {
+                                     delete(node);
+                                     count++;
+                                 });
             n -= count;
             return count;
         }
@@ -205,14 +244,42 @@ namespace pty
             return n==0;
         }
 
-        void traversal_pre(void (*callback)(Node*)=[](Node* node){std::cout<<node->value;}){root->traversal_pre(callback);}
-        void traversal_in(void (*callback)(Node*)=[](Node* node){std::cout<<node->value;}){root->traversal_in(callback);}
-        void traversal_post(void (*callback)(Node*)=[](Node* node){std::cout<<node->value;}){root->traversal_post(callback);}
-
+        template <typename F>
+        void traversal_pre(F const &callback){root->traversal_pre(callback);}
+        template <typename F>
+        void traversal_in(F const &callback){root->traversal_in(callback);}
+        template <typename F>
+        void traversal_post(F const &callback){root->traversal_post(callback);}
+        template <typename F>
+        void traversal_level(F const &callback){root->traversal_level(callback);}
+        bool operator==(binaryTree& other)
+        {
+            if(n != other.size())
+                return false;
+            queue<Node*> comparator;
+            bool ans = true;
+            root->traversal_level([&comparator](Node* node)
+                                  {
+                                      comparator.push(node);
+                                  });
+            other.traversal_level([&](Node* node)
+                                  {
+                                      if (!comparator.is_empty())
+                                      {
+                                          if (*node != *comparator.pop())
+                                              ans = false;
+                                      }
+                                      else
+                                      {
+                                          ans = false;
+                                      }
+                                  });
+            return ans;
+        }
         friend std::ostream& operator<<(std::ostream& o, const binaryTree& tree)
         {
             Node* node = tree.root;
-            tree.printTree(o, node, 0, true);
+            tree.print_tree(o, node, 0, true);
             return o;
         }
     };
