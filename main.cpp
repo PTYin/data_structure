@@ -5,7 +5,8 @@
 #include "Queue.hpp"
 #include "Heap.hpp"
 #include "quick_sort.hpp"
-#include "binaryTree.hpp"
+#include "BinaryTree.hpp"
+#include "ThreadedBinaryTree.hpp"
 
 using namespace pty;
 using std::cout;
@@ -17,6 +18,7 @@ void queue_test();
 void heap_test();
 void quick_sort_test();
 void binaryTree_test();
+void threadedBinaryTree_test();
 int main()
 {
     cout<<endl<<"DoubleLinkedList:##########################"<<endl;
@@ -29,9 +31,36 @@ int main()
     heap_test();
     cout<<endl<<"quick_sort:##########################"<<endl;
     quick_sort_test();
-    cout<<endl<<"binaryTree:##########################"<<endl;
+    cout<<endl<<"BinaryTree:##########################"<<endl;
     binaryTree_test();
+    cout<<endl<<"ThreadedBinaryTree:##########################"<<endl;
+    threadedBinaryTree_test();
     return 0;
+}
+
+void threadedBinaryTree_test()
+{
+    char values[] = {0, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    int pre_order[] = {1, 2, 4, 5, 3, 6, 7, 8};
+    int in_order[] = {4, 2, 5, 1, 7, 6, 8, 3};
+    int post_order[] = {4, 5, 2, 7, 8, 6, 3, 1};
+    ThreadedBinaryTree<char> threadedBinaryTree(8, values, in_order, pre_order);
+    cout << threadedBinaryTree;
+    threadedBinaryTree.makeThreaded();
+    //  像遍历链表一样遍历线索树
+    cout<<"Traversal Forward: ";
+    for(auto item:threadedBinaryTree)
+    {
+        cout<<item<<" ";
+    }
+    cout<<endl;
+    //  倒序遍历，即镜像中序遍历
+    cout<<"Traversal Backward: ";
+    for(ThreadedBinaryTree<char>::Iterator iterator=threadedBinaryTree.back();iterator!=ThreadedBinaryTree<char>::end();iterator--)
+    {
+        cout<<*iterator<<" ";
+    }
+    cout<<endl;
 }
 
 void binaryTree_test()
@@ -42,17 +71,17 @@ void binaryTree_test()
     int in_order[] = {4, 2, 5, 1, 7, 6, 8, 3};
     int post_order[] = {4, 5, 2, 7, 8, 6, 3, 1};
     // 由前序和中序构造树
-    binaryTree<char> binaryTree_from_pre_in(8, values, in_order, pre_order);
+    BinaryTree<char> binaryTree_from_pre_in(8, values, in_order, pre_order);
     cout << binaryTree_from_pre_in;
     cout<<endl<<"-----------------------------"<<endl;
     // 由后序和中序构造树
-    binaryTree<char> binaryTree_from_post_in(8, values, in_order, nullptr, post_order);
+    BinaryTree<char> binaryTree_from_post_in(8, values, in_order, nullptr, post_order);
     cout << binaryTree_from_post_in<<endl;
     cout<<endl<<(binaryTree_from_pre_in == binaryTree_from_post_in?"Two Trees Are Same!":"Two Trees Are Different!")<<endl;
     //  前序遍历
     cout<<"DLR:  ";
 
-    auto fun = [](binaryTree<char>::Node* node){std::cout<<node->get();};
+    auto fun = [](BinaryTree<char>::Node* node){std::cout << node->get();};
 
     binaryTree_from_pre_in.traversal_pre(fun);
     cout<<endl;

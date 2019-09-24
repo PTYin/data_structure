@@ -53,23 +53,23 @@ namespace pty
                 return pt->data;
             }
             iterator& operator=(const iterator &)=default;
-            iterator& operator++()  // ++iterator
+            iterator& operator++()  // ++Iterator
             {
                 pt = pt->next;
                 return *this;
             }
-            iterator operator++(int)   // iterator++
+            iterator operator++(int)   // Iterator++
             {
                 iterator tmp = *this;
                 pt = pt->next;
                 return tmp;
             }
-            iterator& operator--()  // --iterator
+            iterator& operator--()  // --Iterator
             {
                 pt = pt->prev;
                 return *this;
             }
-            iterator operator--(int)  // iterator--
+            iterator operator--(int)  // Iterator--
             {
                 iterator tmp = *this;
                 pt = pt->prev;
