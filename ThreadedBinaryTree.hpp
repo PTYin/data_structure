@@ -1,0 +1,12 @@
+//
+// Created by Peter on 2019/9/24.
+//
+
+#ifndef DATA_STRUCTURE_THREADEDBINARYTREE_HPP
+class ThreadedBinaryTree
+{
+
+};
+#define DATA_STRUCTURE_THREADEDBINARYTREE_HPP
+
+#endif //DATA_STRUCTURE_THREADEDBINARYTREE_HPP

@@ -1,9 +1,9 @@
 #include <cstring>
 
-#include "doubleLinkedList.hpp"
-#include "stack.hpp"
-#include "queue.hpp"
-#include "heap.hpp"
+#include "DoubleLinkedList.hpp"
+#include "Stack.hpp"
+#include "Queue.hpp"
+#include "Heap.hpp"
 #include "quick_sort.hpp"
 #include "binaryTree.hpp"
 
@@ -19,13 +19,13 @@ void quick_sort_test();
 void binaryTree_test();
 int main()
 {
-    cout<<endl<<"doubleLinkedList:##########################"<<endl;
+    cout<<endl<<"DoubleLinkedList:##########################"<<endl;
     doubleLinkedList_test();
-    cout<<endl<<"stack:##########################"<<endl;
+    cout<<endl<<"Stack:##########################"<<endl;
     stack_test();
-    cout<<endl<<"queue:##########################"<<endl;
+    cout<<endl<<"Queue:##########################"<<endl;
     queue_test();
-    cout<<endl<<"heap:##########################"<<endl;
+    cout<<endl<<"Heap:##########################"<<endl;
     heap_test();
     cout<<endl<<"quick_sort:##########################"<<endl;
     quick_sort_test();
@@ -102,13 +102,13 @@ void quick_sort_test()
 
 void heap_test()
 {
-    heap<int> h1;
+    Heap<int> h1;
     int array[] = {3, 5, 1, 4, 100, 43, 0x7fffffff, 12113, 12, 12, 1, 1, 33, 912};
     h1.heapify(array, sizeof(array) / sizeof(int));  // 从一个无序数组以O(n)时间复杂度建堆
     while(!h1.is_empty())
         cout<<h1.pop()<<" ";
     cout << endl;
-    heap<std::string> h2(100, [](std::string string1, std::string string2) -> bool  // 比较器选择大的为优先级较高
+    Heap<std::string> h2(100, [](std::string string1, std::string string2) -> bool  // 比较器选择大的为优先级较高
     {
         return string1 >= string2;
     });
@@ -122,8 +122,8 @@ void heap_test()
 }
 void doubleLinkedList_test()
 {
-    doubleLinkedList<int> linkedList({1, 3, 5}); // 建立int链表
-    doubleLinkedList<int>::iterator iterator = linkedList.find_first(1);  // 找到元素1的位置得到迭代器
+    DoubleLinkedList<int> linkedList({1, 3, 5}); // 建立int链表
+    DoubleLinkedList<int>::iterator iterator = linkedList.find_first(1);  // 找到元素1的位置得到迭代器
     linkedList.insert_before(iterator, 1);  // 在1之前插入1
     iterator++;  // 迭代器向后移动指向3
     linkedList.insert_after(iterator,100);  // 在3之后插入100
@@ -137,7 +137,7 @@ void doubleLinkedList_test()
     linkedList.clear();  // 清空链表
     if(linkedList.is_empty())
         cout<<"empty"<<endl<<"-------------------------"<<endl;  // 输出链表是否为空
-    doubleLinkedList<const char *> stringList({"first", "second", "third"});  // 建立字符串常量链表
+    DoubleLinkedList<const char *> stringList({"first", "second", "third"});  // 建立字符串常量链表
     stringList.push_back("first");
     stringList.push_back("second");
     cout<<stringList<<endl;  // 输出链表
@@ -149,7 +149,7 @@ void doubleLinkedList_test()
 }
 void stack_test()
 {
-    stack<double> stack;
+    Stack<double> stack;
     stack.push(1.1);  // 推入栈中
     stack.push_all({1.2, 3.3 ,5.5});  // 推入栈中
     cout<<stack<<endl;
@@ -159,7 +159,7 @@ void stack_test()
 }
 void queue_test()
 {
-    queue<char> queue({'a', 'b', 'c'});  // a -> b -> c
+    Queue<char> queue({'a', 'b', 'c'});  // a -> b -> c
     queue.push_all({'a', 'b', 'c'});  // a -> b
     cout<<queue<<endl;
     cout<<queue.pop()<<endl;

@@ -6,8 +6,8 @@
 #define DATA_STRUCTURE_BINARYTREE_HPP
 
 #include <iostream>
-#include "stack.hpp"
-#include "queue.hpp"
+#include "Stack.hpp"
+#include "Queue.hpp"
 
 namespace pty
 {
@@ -45,8 +45,8 @@ namespace pty
             template <typename F>
             void traversal(F const &callback, int type)
             {
-                stack<Node *>container({this});
-                stack<Node *>visted;
+                Stack<Node *>container({this});
+                Stack<Node *>visted;
                 while (!container.is_empty())
                 {
                     Node* node = container.pop();
@@ -93,7 +93,7 @@ namespace pty
             template <typename F>
             void traversal_level(F const &callback)
             {
-                queue<Node*> container({this});
+                Queue<Node*> container({this});
                 while (!container.is_empty())
                 {
                     Node* node = container.pop();
@@ -256,7 +256,7 @@ namespace pty
         {
             if(n != other.size())
                 return false;
-            queue<Node*> comparator;
+            Queue<Node*> comparator;
             bool ans = true;
             root->traversal_level([&comparator](Node* node)
                                   {

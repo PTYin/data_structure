@@ -11,7 +11,7 @@ namespace pty
 /*
  * 双向链表类容器*/
     template <typename T>
-    class doubleLinkedList
+    class DoubleLinkedList
     {
     protected:
         /*
@@ -45,7 +45,7 @@ namespace pty
         {
         protected:
             Node* pt;  // 基于指针
-            friend class doubleLinkedList;
+            friend class DoubleLinkedList;
         public:
             explicit iterator(Node* _pt = nullptr):pt(_pt){}
             T& operator*() const
@@ -91,8 +91,8 @@ namespace pty
         int length;  // 容器内元素长度
 
     public:
-        doubleLinkedList():it_head(nullptr), it_tail(nullptr), length(0){}
-        doubleLinkedList(std::initializer_list<T> list)  // 可变长度参数列表，初始化时同时加入到容器中
+        DoubleLinkedList(): it_head(nullptr), it_tail(nullptr), length(0){}
+        DoubleLinkedList(std::initializer_list<T> list)  // 可变长度参数列表，初始化时同时加入到容器中
         {
             length = list.size();
             typename std::initializer_list<T>::iterator it = list.begin();
@@ -105,7 +105,7 @@ namespace pty
                 it_tail++;
             }
         }
-        virtual ~doubleLinkedList()  // 释放容器中所有node指针
+        virtual ~DoubleLinkedList()  // 释放容器中所有node指针
         {
             if(length!=0)
                 for(iterator next=it_head,present=next++;next.pt != nullptr;present=next++)
@@ -320,14 +320,14 @@ namespace pty
             it_node.pt->prev = node_ptr;
             length++;
         }
-        doubleLinkedList& operator=(const doubleLinkedList& other)
+        DoubleLinkedList& operator=(const DoubleLinkedList& other)
         {
             clear();
             for(auto element:other)
                 push_back(element);
             return *this;
         }
-        friend std::ostream& operator<<(std::ostream& io, const doubleLinkedList& linkedList)  // 打印链表
+        friend std::ostream& operator<<(std::ostream& io, const DoubleLinkedList& linkedList)  // 打印链表
         {
             io<<"NULL"<<" <-> ";
             if(linkedList.length != 0)

@@ -5,17 +5,17 @@
 #ifndef DATA_STRUCTURE_QUEUE_HPP
 #define DATA_STRUCTURE_QUEUE_HPP
 
-#include "doubleLinkedList.hpp"
+#include "DoubleLinkedList.hpp"
 namespace pty
 {
     template <typename T>
-    class queue:protected doubleLinkedList<T>
+    class Queue: protected DoubleLinkedList<T>
     {
-        using Node = typename doubleLinkedList<T>::Node;
-        using iterator = typename doubleLinkedList<T>::iterator;
+        using Node = typename DoubleLinkedList<T>::Node;
+        using iterator = typename DoubleLinkedList<T>::iterator;
     public:
-        queue():doubleLinkedList<T>(){}
-        queue(std::initializer_list<T> list)  // 给定列表依次入队列
+        Queue(): DoubleLinkedList<T>(){}
+        Queue(std::initializer_list<T> list)  // 给定列表依次入队列
         {
             push_all(list);
         }
@@ -44,7 +44,7 @@ namespace pty
         }
         void clear()
         {
-            doubleLinkedList<T>::clear();
+            DoubleLinkedList<T>::clear();
         }
         unsigned int size() const
         {
@@ -55,7 +55,7 @@ namespace pty
         {
             return this->length==0;
         }
-        friend std::ostream& operator<<(std::ostream& io, const queue& queue)
+        friend std::ostream& operator<<(std::ostream& io, const Queue& queue)
         {
             if(queue.length != 0)
                 for(iterator it = queue.it_head; it != queue.it_tail; it++)

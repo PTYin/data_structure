@@ -1,8 +1,8 @@
 //
 // Created by Peter on 2019/9/15.
 //
-#include "stack.hpp"
-#include "queue.hpp"
+#include "Stack.hpp"
+#include "Queue.hpp"
 #include <algorithm>
 
 namespace pty
@@ -19,7 +19,7 @@ namespace pty
     void quick_sort_stack(T array[], int left, int right, bool (* comparator)(T, T) = [](T e1, T e2) -> bool{return e1 < e2;})  // 去递归，用栈实现
     {
         using std::pair;
-        stack<pair<int, int>> _stack({pair<int, int> (left, right)});
+        Stack<pair<int, int>> _stack({pair<int, int> (left, right)});
         while (!_stack.is_empty())
         {
             pair<int, int> temp = _stack.pop();
@@ -48,7 +48,7 @@ namespace pty
     void quick_sort_queue(T array[], int left, int right, bool (* comparator)(T, T) = [](T e1, T e2) -> bool{return e1 < e2;})  // 去递归，用栈实现
     {
         using std::pair;
-        queue<pair<int, int>> queue({pair<int, int> (left, right)});
+        Queue<pair<int, int>> queue({pair<int, int> (left, right)});
         while (!queue.is_empty())
         {
             pair<int, int> temp = queue.pop();

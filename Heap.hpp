@@ -26,7 +26,7 @@ namespace pty
     using std::vector;
 
     template <typename T>
-    class heap
+    class Heap
     {
     private:
         void swap(int i, int j)
@@ -77,7 +77,7 @@ namespace pty
                 return;
         }
     public:
-        explicit heap(int _volume = DEFAULT_VOLUME,
+        explicit Heap(int _volume = DEFAULT_VOLUME,
                       bool (*_comparator)(T, T) = [](T prior, T o) -> bool { return prior <= o;})
                 :length(0),comparator(_comparator),container(_volume){}
         void clear()
@@ -85,7 +85,7 @@ namespace pty
             container.clear();
             length = 0;
         }
-        heap(const heap& other):length(other.length),comparator(other.comparator),container(other.container)
+        Heap(const Heap& other): length(other.length), comparator(other.comparator), container(other.container)
         {
             for(int i = 0; i <= other.length; i++)
             {
@@ -121,7 +121,7 @@ namespace pty
             for(int i = PARENT(length - 1); INDEX_VALID(i, length); i--)
                 percolateDown(i);
         }
-        heap& operator=(const heap&) = default;
+        Heap& operator=(const Heap&) = default;
         bool is_empty() const
         {
             return length == 0;
@@ -130,7 +130,7 @@ namespace pty
         {
             return length;
         }
-        friend std::ostream& operator<<(std::ostream& o, const heap& h)
+        friend std::ostream& operator<<(std::ostream& o, const Heap& h)
         {
             for (int i = 0; i < h.length; i++)
                 o << "[" << i << ":" << h.container[i] << "]";
