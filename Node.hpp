@@ -17,6 +17,9 @@ namespace pty
     template<typename T>
     class SearchTree;
 
+    template<typename T>
+    class HuffmanTree;
+
     /*
      * 节点类
      * 重载比较运算符
@@ -29,6 +32,8 @@ namespace pty
         friend class ThreadedBinaryTree<T>;
 
         friend class SearchTree<T>;
+
+        friend class HuffmanTree<T>;
 
     protected:
         T value;

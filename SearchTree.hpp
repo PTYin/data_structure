@@ -9,6 +9,23 @@
 
 namespace pty
 {
+    /*
+     * 二叉搜索树类型，继承二叉树
+     * 新增操作：
+     * 1.   插入元素
+     * 2.   删除元素
+     * 3.   搜索元素，返回指针
+     * 4.   搜索第k小元素
+     * 5.   搜索元素，返回是第几小
+     * 支持父类操作包括：
+     * 1.   从前序、后序中的一个和中序序列构建树
+     * 2.   插入到某节点的左或右儿子节点处 （重载）
+     * 3.   删除以位置node节点为根的子树，并返回该子树原先的规模 （重载）
+     * 4.   将以node节点为根节点的子树从当前树种摘除，并将其转换为一棵独立的树
+     * 5.   返回大小
+     * 6.   返回是否为空
+     * 7.   重载==运算符，比较两棵树
+     * 8.   以凸入表示法打印树*/
     template<typename T>
     class SearchTree : public BinaryTree<T>
     {
@@ -57,6 +74,36 @@ namespace pty
             return node;
         }
 
+        // 搜索元素，返回是第几小
+        int kth(const T& element)
+        {
+            Stack<Node *> container({this->root});
+            Stack<Node *> visted;
+            int kth = 0;
+            while (!container.is_empty())
+            {
+                Node *node = container.pop();
+                if (!visted.is_empty() && visted.top() == node)  // 访问过
+                {
+                    visted.pop();
+                    kth++;
+                    if(node->value == element)
+                        return kth;
+                }
+                else
+                {
+                    if (node->right_child)
+                        container.push(node->right_child);
+                    visted.push(node);
+                    container.push(node);
+                    if (node->left_child)
+                        container.push(node->left_child);
+                }
+            }
+            return -1;
+        }
+
+        // 搜索第k小元素
         Node* find_kth_small(int k)
         {
             Stack<Node *> container({this->root});

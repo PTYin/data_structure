@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <functional>
+#include <assert.h>
 
 #define DEFAULT_VOLUME                  100
 #define INDEX_VALID(i, size)            0 <= i && i < size
@@ -103,6 +104,7 @@ namespace pty
 
         T pop()
         {
+            assert(length>0);
             T temp = container[0];
             container[0] = container[--length];
             percolateDown(0);
@@ -121,7 +123,8 @@ namespace pty
             percolateUp(length - 1);
         }
 
-        void heapify(T *array, int size)  // 从一个无序数组以O(n)时间复杂度建堆
+        template <typename CONTAINER>
+        void heapify(CONTAINER array, int size)  // 从一个无序数组以O(n)时间复杂度建堆
         {
             if (!size)
                 return;

@@ -10,6 +10,7 @@
 #include "BinaryTree.hpp"
 #include "ThreadedBinaryTree.hpp"
 #include "SearchTree.hpp"
+#include "HuffmanTree.hpp"
 
 using namespace pty;
 using std::cout;
@@ -31,6 +32,8 @@ void threadedBinaryTree_test();
 
 void searchTree_test();
 
+void huffmanTree_test();
+
 int main()
 {
     cout << endl << "DoubleLinkedList:##########################" << endl;
@@ -49,7 +52,18 @@ int main()
     threadedBinaryTree_test();
     cout << endl << "SearchTree:##########################" << endl;
     searchTree_test();
+    cout << endl << "HuffmanTree:##########################" << endl;
+    huffmanTree_test();
     return 0;
+}
+
+void huffmanTree_test()
+{
+//    int array[] = {13, 7, 2, 5};
+//    int array[] = {1, 2, 2, 3, 6};
+    int array[] = {9, 7, 6, 6};
+    HuffmanTree<int> huffmanTree(array, sizeof(array) / sizeof(int));
+    cout<<huffmanTree<<endl;
 }
 
 void searchTree_test()
@@ -68,6 +82,7 @@ void searchTree_test()
     searchTree.insert(0x7fffffff);
     // 查找第k小的元素
     cout << "Kth smallest:" << searchTree.find_kth_small(3)->get() << endl;
+    cout<< "4 is the " << searchTree.kth(0x7fffffff) << " smallest in the tree" << endl;
     // 删除元素
     for(int i=0;i<array.size();i++)
     {

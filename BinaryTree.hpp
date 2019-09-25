@@ -22,7 +22,8 @@ namespace pty
      * 5.   返回大小
      * 6.   返回是否为空
      * 7.   重载==运算符，比较两棵树
-     * 8.   以凸入表示法打印树*/
+     * 8.   以凸入表示法打印树
+     * 9.   前序、中序、后序遍历树*/
     template<typename T>
     class BinaryTree
     {
@@ -48,6 +49,8 @@ namespace pty
         }
 
     protected:
+        // 隐藏默认构造函数
+        explicit BinaryTree() : root(nullptr), values(nullptr), pre_order(nullptr), in_order(nullptr), post_order(nullptr), n(0){}
         // 根节点
         Node *root;
         const T *values;
