@@ -7,8 +7,6 @@
 #include "BinaryTree.hpp"
 #include "Node.hpp"
 
-#define CLUE    true
-
 namespace pty
 {
     /*
@@ -26,96 +24,147 @@ namespace pty
      * 6.   返回是否为空
      * 7.   重载==运算符，比较两棵树
      * 8.   以凸入表示法打印树*/
-    template <typename T>
+    template<typename T>
     class ThreadedBinaryTree : public BinaryTree<T>
     {
     public:
         using Node = Node<T>;
+
         class Iterator
         {
         public:
-            Node* pt;  // 基于指针
-            explicit Iterator(Node* _pt = nullptr): pt(_pt){}
-            T& operator*() const
+            Node *pt;  // 基于指针
+            explicit Iterator(Node *_pt = nullptr) : pt(_pt)
+            {}
+
+            T &operator*() const
             {
                 return pt->value;
             }
-            Iterator& operator=(const Iterator &)=default;
-            Iterator& operator++()  // ++Iterator
+
+            Iterator &operator=(const Iterator &) = default;
+
+            Iterator &operator++()  // ++Iterator
             {
                 pt = next(pt);
                 return *this;
             }
+
             Iterator operator++(int)   // Iterator++
             {
                 Iterator tmp = *this;
                 pt = next(pt);
                 return tmp;
             }
-            Iterator& operator--()  // --Iterator
+
+            Iterator &operator--()  // --Iterator
             {
                 pt = previous(pt);
                 return *this;
             }
+
             Iterator operator--(int)  // Iterator--
             {
                 Iterator tmp = *this;
                 pt = previous(pt);
                 return tmp;
             }
-            bool operator==(const Iterator& it)
+
+            bool operator==(const Iterator &it)
             {
                 return pt == it.pt;
             }
-            bool operator!=(const Iterator& it)
+
+            bool operator!=(const Iterator &it)
             {
                 return pt != it.pt;
             }
         };
+
     protected:
         // 头节点
-        Node* head;
+        Node *head;
         // 尾节点
-        Node* tail;
+        Node *tail;
+
+        void makeThreaded(Node *root)
+        {
+            Node *prev = nullptr;
+            head = nullptr;
+            root->traversal_in([&prev, this](Node *node)
+                               {
+                                   if (node->LTag == CLUE || node->left_child == nullptr)
+                                   {
+                                       node->LTag = CLUE;
+                                       node->left_child = prev;
+                                       if (!head)
+                                       {
+                                           head = node;
+                                       }
+                                   }
+                                   if (prev && (prev->right_child == nullptr || prev->RTag == CLUE))
+                                   {
+                                       prev->RTag = CLUE;
+                                       prev->right_child = node;
+                                   }
+                                   prev = node;
+                               });
+            tail = prev;
+        }
+
     public:
         // 删除默认构造函数
         ThreadedBinaryTree() = delete;
-        ThreadedBinaryTree(int size, const T _values[], const int _in_order[] = nullptr, const int _pre_order[] = nullptr, const int _post_order[] = nullptr)
-                        :BinaryTree<T>(size, _values, _in_order, _pre_order, _post_order),head(nullptr),tail(nullptr){}
+
+        explicit ThreadedBinaryTree(const T &_root) : BinaryTree<T>(_root)
+        { makeThreaded(this->root); }
+
+        ThreadedBinaryTree(int size, const T _values[], const int _in_order[] = nullptr,
+                           const int _pre_order[] = nullptr, const int _post_order[] = nullptr)
+                : BinaryTree<T>(size, _values, _in_order, _pre_order, _post_order), head(nullptr), tail(nullptr)
+        {
+            makeThreaded(this->root);
+        }
+
         // 重定义析构函数，避免导致死循环
-        virtual ~ThreadedBinaryTree()
+        ~ThreadedBinaryTree() override
         {
             this->root = nullptr;
-            if(this->n!=0)
-                for(Iterator next=Iterator(head),present=next++;next.pt != nullptr;present=next++)
+            if (this->n != 0)
+                for (Iterator next = Iterator(head), present = next++; next.pt != nullptr; present = next++)
                 {
-                    delete  present.pt;
+                    delete present.pt;
                 }
             delete tail;
         }
+
         Iterator begin() const
         {
             return Iterator(head);
         }
+
         static Iterator end()
         {
             return Iterator(nullptr);
         }
+
         Iterator front() const
         {
             return Iterator(head);
         }
+
         Iterator back() const
         {
             return Iterator(tail);
         }
+
         // 重定义insert
-        virtual void insert(Node* fa, const T _value, bool insert_as_left_child)
+        void insert(Node *fa, const T &_value, bool insert_as_left_child) override
         {
-            Node* node = new Node(_value, fa);
-            if(insert_as_left_child)
+            Node *node = new Node(_value, fa);
+            if (insert_as_left_child)
             {
-                if(fa->LTag == CLUE || fa->left_child == nullptr)
+                if (fa->LTag == CLUE || fa->left_child == nullptr)
                 {
                     this->n++;
                     fa->left_child = node;
@@ -124,60 +173,40 @@ namespace pty
             }
             else
             {
-                if(fa->RTag == CLUE || fa->right_child == nullptr)
+                if (fa->RTag == CLUE || fa->right_child == nullptr)
                 {
                     this->n++;
                     fa->right_child = node;
                     fa->RTag = !CLUE;
                 }
             }
+            makeThreaded(this->root);
         }
-        static Node* previous(Node* node)
+
+        static Node *previous(Node *node)
         {
-            if(node->LTag == CLUE)
+            if (node->LTag == CLUE)
             {
                 return node->left_child;
             }
-            Node* right = node->left_child;
+            Node *right = node->left_child;
             while (right->RTag != CLUE && right->right_child)
                 right = right->right_child;
             return right;
         }
-        static Node* next(Node* node)
+
+        static Node *next(Node *node)
         {
-            if(node->RTag == CLUE || node->right_child == nullptr)
+            if (node->RTag == CLUE || node->right_child == nullptr)
             {
                 return node->right_child;
             }
-            Node* left = node->right_child;
+            Node *left = node->right_child;
             while (left->LTag != CLUE && left->left_child)
                 left = left->left_child;
             return left;
         }
-        void makeThreaded()
-        {
-            Node* prev = nullptr;
-            head = nullptr;
-            this->traversal_in([&prev,this](Node* node)
-                            {
-                                if(node->LTag == CLUE || node->left_child == nullptr)
-                                {
-                                    node->LTag = CLUE;
-                                    node->left_child = prev;
-                                    if(!head)
-                                    {
-                                        head = node;
-                                    }
-                                }
-                                if(prev && (prev->right_child == nullptr || prev->RTag == CLUE))
-                                {
-                                    prev->RTag = CLUE;
-                                    prev->right_child = node;
-                                }
-                                prev = node;
-                            });
-            tail = prev;
-        }
+
     };
 }
 #define DATA_STRUCTURE_THREADEDBINARYTREE_HPP

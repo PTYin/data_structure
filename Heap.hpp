@@ -25,47 +25,50 @@ namespace pty
 {
     using std::vector;
 
-    template <typename T>
+    template<typename T>
     class Heap
     {
     private:
         void swap(int i, int j)
         {
-            if(i == j)
+            if (i == j)
                 return;
             T temp = container[i];
             container[i] = container[j];
             container[j] = temp;
         }
+
     protected:
         int length;
 
         vector<T> container;
+
         bool (*comparator)(T, T);  // 优先级比较器，默认a < b则a的优先级大于b的优先级
         void percolateUp(int index)
         {
-            if(PARENT_VALID(index))
+            if (PARENT_VALID(index))
             {
                 int parent = PARENT(index);
                 int more_prior = MORE_PRIOR(index, parent);
-                if(more_prior != index)
+                if (more_prior != index)
                     return;
                 swap(index, parent);
                 percolateUp(parent);  // assert: more_prior == parent
 
             }
         }
+
         void percolateDown(int index)
         {
-            if(RCHILD_VALID(index, length))  // 既有左孩子又有右孩子
+            if (RCHILD_VALID(index, length))  // 既有左孩子又有右孩子
             {
                 int most_prior = MOST_PRIOR(index, LCHILD(index), RCHILD(index));
-                if(most_prior == index)
+                if (most_prior == index)
                     return;
                 swap(index, most_prior);
                 percolateDown(most_prior);
             }
-            else if(LCHILD_VALID(index, length))
+            else if (LCHILD_VALID(index, length))
             {
                 int more_prior = MORE_PRIOR(index, LCHILD(index));
                 if (more_prior == index)
@@ -76,22 +79,28 @@ namespace pty
             else
                 return;
         }
+
     public:
         explicit Heap(int _volume = DEFAULT_VOLUME,
-                      bool (*_comparator)(T, T) = [](T prior, T o) -> bool { return prior <= o;})
-                :length(0),comparator(_comparator),container(_volume){}
+                      bool (*_comparator)(T, T) = [](T prior, T o) -> bool
+                      { return prior <= o; })
+                : length(0), comparator(_comparator), container(_volume)
+        {}
+
         void clear()
         {
             container.clear();
             length = 0;
         }
-        Heap(const Heap& other): length(other.length), comparator(other.comparator), container(other.container)
+
+        Heap(const Heap &other) : length(other.length), comparator(other.comparator), container(other.container)
         {
-            for(int i = 0; i <= other.length; i++)
+            for (int i = 0; i <= other.length; i++)
             {
                 container[i] = other.container[i];
             }
         }
+
         T pop()
         {
             T temp = container[0];
@@ -99,38 +108,45 @@ namespace pty
             percolateDown(0);
             return temp;
         }
+
         T top() const
         {
             return container[0];
         }
+
         void insert(T element)
         {
             container[length] = element;
             length++;
             percolateUp(length - 1);
         }
-        void heapify(T* array, int size)  // 从一个无序数组以O(n)时间复杂度建堆
+
+        void heapify(T *array, int size)  // 从一个无序数组以O(n)时间复杂度建堆
         {
-            if(!size)
+            if (!size)
                 return;
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 container[i] = array[i];
             }
             length = size;
-            for(int i = PARENT(length - 1); INDEX_VALID(i, length); i--)
+            for (int i = PARENT(length - 1); INDEX_VALID(i, length); i--)
                 percolateDown(i);
         }
-        Heap& operator=(const Heap&) = default;
+
+        Heap &operator=(const Heap &) = default;
+
         bool is_empty() const
         {
             return length == 0;
         }
+
         int size() const
         {
             return length;
         }
-        friend std::ostream& operator<<(std::ostream& o, const Heap& h)
+
+        friend std::ostream &operator<<(std::ostream &o, const Heap &h)
         {
             for (int i = 0; i < h.length; i++)
                 o << "[" << i << ":" << h.container[i] << "]";
