@@ -1,10 +1,14 @@
 # Usage
-    #include "doubleLinkedList.hpp"
-    #include "stack.hpp"
-    #include "queue.hpp"
-    #include "heap.hpp"
+    #include "DoubleLinkedList.hpp"
+    #include "Stack.hpp"
+    #include "Queue.hpp"
+    #include "Heap.hpp"
     #include "quick_sort.hpp"
-    #include "binaryTree.hpp"
+    #include "Node.hpp"
+    #include "BinaryTree.hpp"
+    #include "ThreadedBinaryTree.hpp"
+    #include "SearchTree.hpp"
+    #include "HuffmanTree.hpp"
 
 # Test
     mkdir build
