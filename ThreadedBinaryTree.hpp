@@ -24,11 +24,33 @@ namespace pty
      * 6.   返回是否为空
      * 7.   重载==运算符，比较两棵树
      * 8.   以凸入表示法打印树*/
-    template<typename T>
-    class ThreadedBinaryTree : public BinaryTree<T>
+    template<typename T, typename Node>
+    class ThreadedBinaryTree : public BinaryTree<T, Node>
     {
+    private:
+        // 递归以凸入表示法打印树
+        void print_tree(std::ostream &o, Node *node, int indent, bool left) const
+        {
+            if (node == nullptr || !this->n)
+                return;
+            for (int i = 0; i < indent; i++)
+                o << "\t";
+            if (indent == 0)
+                o << "root:";
+            else
+                left ? o << "left: " : o << "right:";
+            o << node->value << std::endl;
+            if (node->LTag != CLUE)
+            print_tree(o, node->left(), indent + 1, true);
+            if (node->RTag != CLUE)
+            print_tree(o, node->right(), indent + 1, false);
+        }
+
+        int remove(Node *node) override{ return 0;}
+
+        BinaryTree <T, Node> &secede(Node *node) override{ return *this;}
+
     public:
-        using Node = Node<T>;
 
         class Iterator
         {
@@ -87,25 +109,25 @@ namespace pty
         // 尾节点
         Node *tail;
 
-        void makeThreaded(Node *root)
+        void makeThreaded(Node *_root)
         {
             Node *prev = nullptr;
             head = nullptr;
-            root->traversal_in([&prev, this](Node *node)
+            _root->traversal_in([&prev, this](Node *node)
                                {
-                                   if (node->LTag == CLUE || node->left_child == nullptr)
+                                   if (node->LTag == CLUE || node->left() == nullptr)
                                    {
                                        node->LTag = CLUE;
-                                       node->left_child = prev;
+                                       node->left() = prev;
                                        if (!head)
                                        {
                                            head = node;
                                        }
                                    }
-                                   if (prev && (prev->right_child == nullptr || prev->RTag == CLUE))
+                                   if (prev && (prev->right() == nullptr || prev->RTag == CLUE))
                                    {
                                        prev->RTag = CLUE;
-                                       prev->right_child = node;
+                                       prev->right() = node;
                                    }
                                    prev = node;
                                });
@@ -116,12 +138,12 @@ namespace pty
         // 删除默认构造函数
         ThreadedBinaryTree() = delete;
 
-        explicit ThreadedBinaryTree(const T &_root) : BinaryTree<T>(_root)
+        explicit ThreadedBinaryTree(const T &_root) : BinaryTree<T, Node>(_root)
         { makeThreaded(this->root); }
 
         ThreadedBinaryTree(int size, const T _values[], const int _in_order[] = nullptr,
                            const int _pre_order[] = nullptr, const int _post_order[] = nullptr)
-                : BinaryTree<T>(size, _values, _in_order, _pre_order, _post_order), head(nullptr), tail(nullptr)
+                : BinaryTree<T, Node>(size, _values, _in_order, _pre_order, _post_order), head(nullptr), tail(nullptr)
         {
             makeThreaded(this->root);
         }
@@ -159,24 +181,24 @@ namespace pty
         }
 
         // 重定义insert
-        void insert(Node *fa, const T &_value, bool insert_as_left_child) override
+        void insert(Node *fa, const T &_value, bool insert_as_left_child)
         {
             Node *node = new Node(_value, fa);
             if (insert_as_left_child)
             {
-                if (fa->LTag == CLUE || fa->left_child == nullptr)
+                if (fa->LTag == CLUE || fa->left() == nullptr)
                 {
                     this->n++;
-                    fa->left_child = node;
+                    fa->left() = node;
                     fa->LTag = !CLUE;
                 }
             }
             else
             {
-                if (fa->RTag == CLUE || fa->right_child == nullptr)
+                if (fa->RTag == CLUE || fa->right() == nullptr)
                 {
                     this->n++;
-                    fa->right_child = node;
+                    fa->right() = node;
                     fa->RTag = !CLUE;
                 }
             }
@@ -187,26 +209,32 @@ namespace pty
         {
             if (node->LTag == CLUE)
             {
-                return node->left_child;
+                return node->left();
             }
-            Node *right = node->left_child;
-            while (right->RTag != CLUE && right->right_child)
-                right = right->right_child;
+            Node *right = node->left();
+            while (right->RTag != CLUE && right->right())
+                right = right->right();
             return right;
         }
 
         static Node *next(Node *node)
         {
-            if (node->RTag == CLUE || node->right_child == nullptr)
+            if (node->RTag == CLUE || node->right() == nullptr)
             {
-                return node->right_child;
+                return node->right();
             }
-            Node *left = node->right_child;
-            while (left->LTag != CLUE && left->left_child)
-                left = left->left_child;
+            Node *left = node->right();
+            while (left->LTag != CLUE && left->left())
+                left = left->left();
             return left;
         }
 
+        friend std::ostream &operator<<(std::ostream &o, const ThreadedBinaryTree &tree)
+        {
+            Node *node = tree.root;
+            tree.print_tree(o, node, 0, true);
+            return o;
+        }
     };
 }
 #define DATA_STRUCTURE_THREADEDBINARYTREE_HPP

@@ -19,10 +19,9 @@ namespace pty
      * 重载==运算符，比较两棵树
      * 以凸入表示法打印树
      * 前序、中序、后序遍历树*/
-    template <typename T>
+    template <typename T, typename Node>
     class HuffmanTree : public BinaryTree<T>
     {
-        using Node  = Node<T>;
     private:
         void insert(Node *fa, const T &_value, bool insert_as_left_child) override{}
 
@@ -51,9 +50,9 @@ namespace pty
                 Node* node2 = heap.pop();
                 this->n += 2;
                 fa = new Node(node1->value+node2->value);
-                fa->left_child = node1;
-                fa->right_child = node2;
-                node1->father = node2->father = fa;
+                fa->left() = node1;
+                fa->right() = node2;
+                node1->fa() = node2->fa() = fa;
                 heap.insert(fa);
             }
             this->root = fa;

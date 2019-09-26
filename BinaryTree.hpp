@@ -6,6 +6,7 @@
 #define DATA_STRUCTURE_BINARYTREE_HPP
 
 #include <iostream>
+#include "PrimitiveTree.hpp"
 #include "Stack.hpp"
 #include "Queue.hpp"
 #include "Node.hpp"
@@ -24,11 +25,9 @@ namespace pty
      * 7.   重载==运算符，比较两棵树
      * 8.   以凸入表示法打印树
      * 9.   前序、中序、后序遍历树*/
-    template<typename T>
+    template<typename T, class Node>
     class BinaryTree
     {
-    public:
-        using Node = Node<T>;
     private:
         // 递归以凸入表示法打印树
         void print_tree(std::ostream &o, Node *node, int indent, bool left) const
@@ -42,10 +41,10 @@ namespace pty
             else
                 left ? o << "left: " : o << "right:";
             o << node->value << std::endl;
-            if (node->LTag != CLUE)
-                print_tree(o, node->left_child, indent + 1, true);
-            if (node->RTag != CLUE)
-                print_tree(o, node->right_child, indent + 1, false);
+//            if (node->LTag != CLUE)
+                print_tree(o, node->left(), indent + 1, true);
+//            if (node->RTag != CLUE)
+                print_tree(o, node->right(), indent + 1, false);
         }
 
     protected:
@@ -69,7 +68,7 @@ namespace pty
                     Node *node = new Node(values[pre_order[root_pre]], fa);
                     if (fa != nullptr)
                     {
-                        left ? fa->left_child = node : fa->right_child = node;
+                        left ? fa->left() = node : fa->right() = node;
                     }
                     else
                     {
@@ -91,7 +90,7 @@ namespace pty
                     Node *node = new Node(values[post_order[root_post]], fa);
                     if (fa != nullptr)
                     {
-                        left ? fa->left_child = node : fa->right_child = node;
+                        left ? fa->left() = node : fa->right() = node;
 
                     }
                     else
@@ -133,15 +132,15 @@ namespace pty
             Node *node = new Node(_value, fa);
             if (insert_as_left_child)
             {
-                if (fa->left_child == nullptr)
+                if (fa->left() == nullptr)
                     n++;
-                fa->left_child = node;
+                fa->left() = node;
             }
             else
             {
-                if (fa->right_child == nullptr)
+                if (fa->right() == nullptr)
                     n++;
-                fa->right_child = node;
+                fa->right() = node;
             }
         }
 
@@ -149,7 +148,8 @@ namespace pty
         virtual int remove(Node *node)
         {
             int count = 0;
-            node->father->left_child == node ? node->father->left_child = nullptr : node->father->right_child = nullptr;
+            if(node->fa())
+                node->fa()->left() == node ? node->fa()->left() = nullptr : node->fa()->right() = nullptr;
             node->traversal_post([&count](Node *node)
                                  {
                                      delete (node);
@@ -164,8 +164,9 @@ namespace pty
         {
             auto new_tree = new BinaryTree(root->value);
             int count = 0;
-            node->father->left_child == node ? node->father->left_child = nullptr : node->father->right_child = nullptr;
-            node->father = nullptr;
+            if(node->fa())
+                node->fa()->left() == node ? node->fa()->left() = nullptr : node->fa()->right() = nullptr;
+            node->fa() = nullptr;
             node->traversal_post([&count](Node *node)
                                  {
                                      count++;

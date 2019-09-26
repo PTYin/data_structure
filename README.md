@@ -4,7 +4,7 @@
     #include "Queue.hpp"
     #include "Heap.hpp"
     #include "quick_sort.hpp"
-    #include "Node.hpp"
+    #include "PrimitiveNode.hpp"
     #include "BinaryTree.hpp"
     #include "ThreadedBinaryTree.hpp"
     #include "SearchTree.hpp"

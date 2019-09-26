@@ -26,18 +26,17 @@ namespace pty
      * 6.   返回是否为空
      * 7.   重载==运算符，比较两棵树
      * 8.   以凸入表示法打印树*/
-    template<typename T>
+    template<typename T, typename Node>
     class SearchTree : public BinaryTree<T>
     {
-        using Node = Node<T>;
     protected:
         Node *bestMatch;
         Node* succ(Node* node)
         {
-            Node* succ = node->right_child;
-            while (succ->left_child)
+            Node* succ = node->right();
+            while (succ->left())
             {
-                succ = succ->left_child;
+                succ = succ->left();
             }
             return succ;
         }
@@ -69,7 +68,7 @@ namespace pty
             while (node && node->value != element)
             {
                 bestMatch = node;
-                node = node->value > element ? node->left_child : node->right_child;
+                node = node->value > element ? node->left() : node->right();
             }
             return node;
         }
@@ -92,12 +91,12 @@ namespace pty
                 }
                 else
                 {
-                    if (node->right_child)
-                        container.push(node->right_child);
+                    if (node->right())
+                        container.push(node->right());
                     visted.push(node);
                     container.push(node);
-                    if (node->left_child)
-                        container.push(node->left_child);
+                    if (node->left())
+                        container.push(node->left());
                 }
             }
             return -1;
@@ -120,12 +119,12 @@ namespace pty
                 }
                 else
                 {
-                    if (node->right_child)
-                        container.push(node->right_child);
+                    if (node->right())
+                        container.push(node->right());
                     visted.push(node);
                     container.push(node);
-                    if (node->left_child)
-                        container.push(node->left_child);
+                    if (node->left())
+                        container.push(node->left());
                 }
             }
             return kth;
@@ -140,8 +139,8 @@ namespace pty
         {
             auto new_tree = new SearchTree(this->root->value);
             int count = 0;
-            node->father->left_child == node ? node->father->left_child = nullptr : node->father->right_child = nullptr;
-            node->father = nullptr;
+            node->fa()->left() == node ? node->fa()->left() = nullptr : node->fa()->right() = nullptr;
+            node->fa() = nullptr;
             node->traversal_post([&count](Node *node)
                                  {
                                      count++;
@@ -158,22 +157,22 @@ namespace pty
                 return;
             Node *node = new Node(value, bestMatch);
             if (node->value < bestMatch->value)
-                bestMatch->left_child = node;
+                bestMatch->left() = node;
             else
-                bestMatch->right_child = node;
+                bestMatch->right() = node;
             this->n++;
         }
 
         int remove(Node *node) override
         {
             Node *succ = nullptr;
-            if (node->left_child == nullptr)
+            if (node->left() == nullptr)
             {
-                succ = node->right_child;
+                succ = node->right();
             }
-            else if (node->right_child == nullptr)
+            else if (node->right() == nullptr)
             {
-                succ = node->left_child;
+                succ = node->left();
             }
             else  // 左右子树都存在
             {
@@ -181,19 +180,19 @@ namespace pty
                 std::swap(succ->value, node->value);
                 // 此时还是一棵搜索树
                 node = succ;
-                if (node->left_child == nullptr)
+                if (node->left() == nullptr)
                 {
-                    succ = node->right_child;
+                    succ = node->right();
                 }
-                else if (node->right_child == nullptr)
+                else if (node->right() == nullptr)
                 {
-                    succ = node->left_child;
+                    succ = node->left();
                 }
             }
             if (succ)
-                succ->father = node->father;
-            if (node->father)
-                node->father->left_child == node ? node->father->left_child = succ : node->father->right_child = succ;
+                succ->fa() = node->fa();
+            if (node->fa())
+                node->fa()->left() == node ? node->fa()->left() = succ : node->fa()->right() = succ;
             else  // 删除根节点
                 this->root = succ;
             this->n--;

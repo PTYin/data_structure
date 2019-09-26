@@ -86,7 +86,7 @@ void searchTree_test()
     // 删除元素
     for(int i=0;i<array.size();i++)
     {
-        Node<int> *node = searchTree.search(array[i]);
+        PrimitiveNode<int> *node = searchTree.search(array[i]);
         cout << node->get() << endl;
         searchTree.remove(node);
 //        cout << searchTree << endl;
@@ -148,7 +148,7 @@ void binaryTree_test()
     //  前序遍历
     cout << "DLR:  ";
 
-    auto fun = [](BinaryTree<char>::Node *node)
+    auto fun = [](auto *node)
     { std::cout << node->get(); };
 
     binaryTree_from_pre_in.traversal_pre(fun);
