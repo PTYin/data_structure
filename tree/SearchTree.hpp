@@ -27,31 +27,37 @@ namespace pty
      * 7.   重载==运算符，比较两棵树
      * 8.   以凸入表示法打印树*/
     template<typename T, typename Node>
-    class SearchTree : public BinaryTree<T>
+    class SearchTree : protected BinaryTree<T, Node>
     {
     protected:
         Node *bestMatch;
-        Node* succ(Node* node)
+
+        Node *succ(Node *node)
         {
-            Node* succ = node->right();
+            Node *succ = node->right();
             while (succ->left())
             {
                 succ = succ->left();
             }
             return succ;
         }
+
     public:
-        explicit SearchTree(const T &_root) : BinaryTree<T>(_root)
+
+        SearchTree() : BinaryTree<T, Node>()
         {}
 
-        SearchTree(std::initializer_list<T> list) : BinaryTree<T>(list[0])
+        explicit SearchTree(const T &_root) : BinaryTree<T, Node>(_root)
+        {}
+
+        SearchTree(std::initializer_list<T> list) : BinaryTree<T, Node>()
         {
             for (auto item:list)
-                this->insert(item);
+                insert(item);
         }
 
         template<typename CONTAINER>
-        explicit SearchTree(CONTAINER container):BinaryTree<T>(container[0])
+        explicit SearchTree(CONTAINER container):BinaryTree<T, Node>()
         {
             for (auto iterator = container.begin(); iterator != container.end(); iterator++)
                 insert(*iterator);
@@ -59,8 +65,9 @@ namespace pty
 
         SearchTree(int size, const T _values[], const int _in_order[] = nullptr, const int _pre_order[] = nullptr,
                    const int _post_order[] = nullptr)
-                : BinaryTree<T>(size, _values, _in_order, _pre_order, _post_order)
+                : BinaryTree<T, Node>(size, _values, _in_order, _pre_order, _post_order)
         {}
+
 
         virtual Node *search(const T &element)
         {
@@ -74,7 +81,7 @@ namespace pty
         }
 
         // 搜索元素，返回是第几小
-        int kth(const T& element)
+        int kth(const T &element)
         {
             Stack<Node *> container({this->root});
             Stack<Node *> visted;
@@ -86,7 +93,7 @@ namespace pty
                 {
                     visted.pop();
                     kth++;
-                    if(node->value == element)
+                    if (node->value == element)
                         return kth;
                 }
                 else
@@ -103,11 +110,11 @@ namespace pty
         }
 
         // 搜索第k小元素
-        Node* find_kth_small(int k)
+        Node *find_kth_small(int k)
         {
             Stack<Node *> container({this->root});
             Stack<Node *> visted;
-            Node* kth = nullptr;
+            Node *kth = nullptr;
             while (!container.is_empty() && k)
             {
                 Node *node = container.pop();
@@ -130,29 +137,19 @@ namespace pty
             return kth;
         }
 
-        void insert(Node *fa, const T &_value, bool insert_as_left_child) override
+        virtual void insert(Node *fa, const T &_value, bool insert_as_left_child) override
         {
             insert(_value);
         }
 
-        SearchTree<T> &secede(Node *node) override
-        {
-            auto new_tree = new SearchTree(this->root->value);
-            int count = 0;
-            node->fa()->left() == node ? node->fa()->left() = nullptr : node->fa()->right() = nullptr;
-            node->fa() = nullptr;
-            node->traversal_post([&count](Node *node)
-                                 {
-                                     count++;
-                                 });
-            this->n -= count;
-            new_tree->root = node;
-            new_tree->n = count;
-            return *new_tree;
-        }
-
         virtual void insert(const T &value)
         {
+            if (!this->n)
+            {
+                this->root = new Node(value);
+                this->n++;
+                return;
+            }
             if (search(value) != nullptr)
                 return;
             Node *node = new Node(value, bestMatch);
@@ -161,6 +158,15 @@ namespace pty
             else
                 bestMatch->right() = node;
             this->n++;
+        }
+
+        int remove(const T &value)
+        {
+            Node *node = search(value);
+            if (!node)
+                return 0;
+            else
+                return remove(node);
         }
 
         int remove(Node *node) override
@@ -196,8 +202,17 @@ namespace pty
             else  // 删除根节点
                 this->root = succ;
             this->n--;
+            bestMatch = node->fa();
             delete node;
             return 1;
+        }
+
+        using BinaryTree<T, Node>::size;
+        using BinaryTree<T, Node>::is_empty;
+
+        friend std::ostream &operator<<(std::ostream &o, const SearchTree<T, Node> &tree)
+        {
+            return o << (BinaryTree<T, Node> &) tree;
         }
     };
 }

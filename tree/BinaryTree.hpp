@@ -6,9 +6,8 @@
 #define DATA_STRUCTURE_BINARYTREE_HPP
 
 #include <iostream>
-#include "PrimitiveTree.hpp"
-#include "Stack.hpp"
-#include "Queue.hpp"
+#include "../Stack.hpp"
+#include "../Queue.hpp"
 #include "Node.hpp"
 
 namespace pty
@@ -42,14 +41,17 @@ namespace pty
                 left ? o << "left: " : o << "right:";
             o << node->value << std::endl;
 //            if (node->LTag != CLUE)
-                print_tree(o, node->left(), indent + 1, true);
+            print_tree(o, node->left(), indent + 1, true);
 //            if (node->RTag != CLUE)
-                print_tree(o, node->right(), indent + 1, false);
+            print_tree(o, node->right(), indent + 1, false);
         }
 
     protected:
         // 隐藏默认构造函数
-        explicit BinaryTree() : root(nullptr), values(nullptr), pre_order(nullptr), in_order(nullptr), post_order(nullptr), n(0){}
+        explicit BinaryTree() : root(nullptr), values(nullptr), pre_order(nullptr), in_order(nullptr),
+                                post_order(nullptr), n(0)
+        {}
+
         // 根节点
         Node *root;
         const T *values;
@@ -148,13 +150,13 @@ namespace pty
         virtual int remove(Node *node)
         {
             int count = 0;
-            if(node->fa())
+            if (node->fa())
                 node->fa()->left() == node ? node->fa()->left() = nullptr : node->fa()->right() = nullptr;
-            node->traversal_post([&count](Node *node)
-                                 {
-                                     delete (node);
-                                     count++;
-                                 });
+            node->traversal([&count](Node *node)
+                            {
+                                delete (node);
+                                count++;
+                            }, 2);
             n -= count;
             return count;
         }
@@ -164,13 +166,13 @@ namespace pty
         {
             auto new_tree = new BinaryTree(root->value);
             int count = 0;
-            if(node->fa())
+            if (node->fa())
                 node->fa()->left() == node ? node->fa()->left() = nullptr : node->fa()->right() = nullptr;
             node->fa() = nullptr;
-            node->traversal_post([&count](Node *node)
-                                 {
-                                     count++;
-                                 });
+            node->traversal([&count](Node *node)
+                            {
+                                count++;
+                            }, 2);
             n -= count;
             new_tree->root = node;
             new_tree->n = count;
@@ -189,15 +191,15 @@ namespace pty
 
         template<typename F>
         void traversal_pre(F const &callback)
-        { if (root)root->traversal_pre(callback); }
+        { if (root)root->traversal(callback, 0); }
 
         template<typename F>
         void traversal_in(F const &callback)
-        { if (root)root->traversal_in(callback); }
+        { if (root)root->traversal(callback, 1); }
 
         template<typename F>
         void traversal_post(F const &callback)
-        { if (root)root->traversal_post(callback); }
+        { if (root)root->traversal(callback, 2); }
 
         template<typename F>
         void traversal_level(F const &callback)

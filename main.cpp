@@ -6,11 +6,12 @@
 #include "Queue.hpp"
 #include "Heap.hpp"
 #include "quick_sort.hpp"
-#include "Node.hpp"
-#include "BinaryTree.hpp"
-#include "ThreadedBinaryTree.hpp"
-#include "SearchTree.hpp"
-#include "HuffmanTree.hpp"
+#include "tree/Node.hpp"
+#include "tree/BinaryTree.hpp"
+#include "tree/ThreadedBinaryTree.hpp"
+#include "tree/SearchTree.hpp"
+#include "tree/HuffmanTree.hpp"
+#include "tree/AVLTree.hpp"
 
 using namespace pty;
 using std::cout;
@@ -34,6 +35,8 @@ void searchTree_test();
 
 void huffmanTree_test();
 
+void AVLTree_test();
+
 int main()
 {
     cout << endl << "DoubleLinkedList:##########################" << endl;
@@ -54,7 +57,20 @@ int main()
     searchTree_test();
     cout << endl << "HuffmanTree:##########################" << endl;
     huffmanTree_test();
+    cout << endl << "AVLTree:##########################" << endl;
+    AVLTree_test();
     return 0;
+}
+
+void AVLTree_test()
+{
+    AVLTree<int> tree({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+    cout << tree;
+    for (int i = 4; i <= 8; i++)
+    {
+        tree.remove(i);
+    }
+    cout << tree;
 }
 
 void huffmanTree_test()
@@ -63,7 +79,7 @@ void huffmanTree_test()
 //    int array[] = {1, 2, 2, 3, 6};
     int array[] = {9, 7, 6, 6};
     HuffmanTree<int> huffmanTree(array, sizeof(array) / sizeof(int));
-    cout<<huffmanTree<<endl;
+    cout << huffmanTree << endl;
 }
 
 void searchTree_test()
@@ -81,12 +97,12 @@ void searchTree_test()
     // 向搜索树插入
     searchTree.insert(0x7fffffff);
     // 查找第k小的元素
-    cout << "Kth smallest:" << searchTree.find_kth_small(3)->get() << endl;
-    cout<< "4 is the " << searchTree.kth(0x7fffffff) << " smallest in the tree" << endl;
+    cout << "3rd smallest:" << searchTree.find_kth_small(3)->get() << endl;
+    cout << "4 is the " << searchTree.kth(4) << " smallest in the tree" << endl;
     // 删除元素
-    for(int i=0;i<array.size();i++)
+    for (int i = 0; i < array.size(); i++)
     {
-        PrimitiveNode<int> *node = searchTree.search(array[i]);
+        auto node = searchTree.search(array[i]);
         cout << node->get() << endl;
         searchTree.remove(node);
 //        cout << searchTree << endl;

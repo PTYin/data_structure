@@ -25,7 +25,7 @@ namespace pty
      * 7.   重载==运算符，比较两棵树
      * 8.   以凸入表示法打印树*/
     template<typename T, typename Node>
-    class ThreadedBinaryTree : public BinaryTree<T, Node>
+    class ThreadedBinaryTree : protected BinaryTree<T, Node>
     {
     private:
         // 递归以凸入表示法打印树
@@ -41,14 +41,16 @@ namespace pty
                 left ? o << "left: " : o << "right:";
             o << node->value << std::endl;
             if (node->LTag != CLUE)
-            print_tree(o, node->left(), indent + 1, true);
+                print_tree(o, node->left(), indent + 1, true);
             if (node->RTag != CLUE)
-            print_tree(o, node->right(), indent + 1, false);
+                print_tree(o, node->right(), indent + 1, false);
         }
 
-        int remove(Node *node) override{ return 0;}
+        int remove(Node *node) override
+        { return 0; }
 
-        BinaryTree <T, Node> &secede(Node *node) override{ return *this;}
+        BinaryTree <T, Node> &secede(Node *node) override
+        { return *this; }
 
     public:
 
@@ -113,24 +115,24 @@ namespace pty
         {
             Node *prev = nullptr;
             head = nullptr;
-            _root->traversal_in([&prev, this](Node *node)
-                               {
-                                   if (node->LTag == CLUE || node->left() == nullptr)
-                                   {
-                                       node->LTag = CLUE;
-                                       node->left() = prev;
-                                       if (!head)
-                                       {
-                                           head = node;
-                                       }
-                                   }
-                                   if (prev && (prev->right() == nullptr || prev->RTag == CLUE))
-                                   {
-                                       prev->RTag = CLUE;
-                                       prev->right() = node;
-                                   }
-                                   prev = node;
-                               });
+            _root->traversal([&prev, this](Node *node)
+                             {
+                                 if (node->LTag == CLUE || node->left() == nullptr)
+                                 {
+                                     node->LTag = CLUE;
+                                     node->left() = prev;
+                                     if (!head)
+                                     {
+                                         head = node;
+                                     }
+                                 }
+                                 if (prev && (prev->right() == nullptr || prev->RTag == CLUE))
+                                 {
+                                     prev->RTag = CLUE;
+                                     prev->right() = node;
+                                 }
+                                 prev = node;
+                             }, 1);
             tail = prev;
         }
 
