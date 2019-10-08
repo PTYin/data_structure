@@ -19,6 +19,7 @@ namespace pty
     class AVLTree : public SearchTree<T, Node>
     {
     protected:
+        // 返回节点左右子树中高度更高的子树根节点
         Node *tallerChild(Node *node)
         {
             if (FACTOR(node) > 0)
@@ -28,12 +29,12 @@ namespace pty
             else
                 return (node->fa() ? (node->fa()->left() == node ? node->left() : node->right()) : node->left());
         }
-
+        // 从下到上更新高度
         void updateHeight(Node *node)
         {
             node->height = FACTOR(node) >= 0 ? STATURE(node->left()) + 1 : STATURE(node->right()) + 1;
         }
-
+        // 根据中序遍历顺序修改节点失衡部分，最终结构为b为根节点，a为b左儿子，c为b右儿子，T0、T1为a左右子树，T2、T3为c左右子树
         Node *connect34(Node *a, Node *b, Node *c, Node *T0, Node *T1, Node *T2, Node *T3)
         {
             a->left() = T0;
@@ -59,7 +60,7 @@ namespace pty
 
             return b;
         }
-
+        // 根据情况进行调整
         Node *rotateAt(Node *node)
         {
             Node *fa = node->fa();
@@ -112,12 +113,12 @@ namespace pty
             for (auto iterator = container.begin(); iterator != container.end(); iterator++)
                 insert(*iterator);
         }
-
+        // 重载父类插入方法
         void insert(Node *fa, const T &_value, bool insert_as_left_child) override
         {
             insert(_value);
         }
-
+        // 插入节点
         void insert(const T &value) override
         {
             if (!this->n)
@@ -147,7 +148,7 @@ namespace pty
         }
 
         using SearchTree<T, Node>::remove;
-
+        // 删除
         int remove(Node *node) override
         {
             SearchTree<T, Node>::remove(node);

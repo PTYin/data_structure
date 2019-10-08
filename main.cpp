@@ -6,12 +6,12 @@
 #include "Queue.hpp"
 #include "Heap.hpp"
 #include "quick_sort.hpp"
-#include "tree/Node.hpp"
 #include "tree/BinaryTree.hpp"
 #include "tree/ThreadedBinaryTree.hpp"
 #include "tree/SearchTree.hpp"
 #include "tree/HuffmanTree.hpp"
 #include "tree/AVLTree.hpp"
+#include "time.h"
 
 using namespace pty;
 using std::cout;
@@ -64,13 +64,39 @@ int main()
 
 void AVLTree_test()
 {
-    AVLTree<int> tree({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-    cout << tree;
-    for (int i = 4; i <= 8; i++)
+    // 分别比较AVL树和普通儿叉搜索树顺序插入和删除的时间
+
+    std::array<int, 10000> array{};  // 顺序数组
+    for(int i = 0; i < 10000; i++)
+        array[i] = i;
+
+    clock_t start = clock();
+    AVLTree<int> avl(array);
+    clock_t finish = clock();
+    cout << "AVLTree clock time(insert): " << finish-start << endl;
+
+    start = clock();
+    SearchTree<int> search(array);
+    finish = clock();
+    cout << "SearchTree clock time(insert): " << finish-start << endl;
+
+    start = clock();
+    for (int i = avl.size()-1; i >= 0; i--)
     {
-        tree.remove(i);
+        avl.remove(i);
     }
-    cout << tree;
+    finish = clock();
+    cout << "AVLTree clock time(remove): " << finish-start << endl;
+
+    start = clock();
+    for (int i = search.size()-1; i >= 0; i--)
+    {
+        search.remove(i);
+    }
+    finish = clock();
+    cout << "SearchTree clock time(remove): " << finish-start << endl;
+    cout << "AVLTree remains " << avl.size() << "; SearchTree remains " << search.size() << endl;
+
 }
 
 void huffmanTree_test()
