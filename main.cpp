@@ -1,5 +1,6 @@
 #include <cstring>
 #include <random>
+#include <time.h>
 
 #include "DoubleLinkedList.hpp"
 #include "Stack.hpp"
@@ -11,7 +12,8 @@
 #include "tree/SearchTree.hpp"
 #include "tree/HuffmanTree.hpp"
 #include "tree/AVLTree.hpp"
-#include "time.h"
+#include "tree/Splay.hpp"
+#include "tree/Treap.hpp"
 
 using namespace pty;
 using std::cout;
@@ -37,6 +39,10 @@ void huffmanTree_test();
 
 void AVLTree_test();
 
+void splay_test();
+
+void treap_test();
+
 int main()
 {
     cout << endl << "DoubleLinkedList:##########################" << endl;
@@ -59,7 +65,84 @@ int main()
     huffmanTree_test();
     cout << endl << "AVLTree:##########################" << endl;
     AVLTree_test();
+    cout << endl << "Splay:##########################" << endl;
+    splay_test();
+    cout << endl << "treap:##########################" << endl;
+    treap_test();
     return 0;
+}
+
+void treap_test()
+{
+
+    std::array<int, 10000> array{};  // 顺序数组
+    for(int i = 0; i < 10000; i++)
+        array[i] = i;
+
+    clock_t start = clock();
+    Treap<int> treap(array);
+    clock_t finish = clock();
+    cout << "Treap clock time(serial insert): " << finish-start << endl;
+
+    treap.clear();
+
+    unsigned seed = start;
+    std::shuffle(array.begin(), array.end(), std::default_random_engine(seed));
+
+    start = clock();
+    for(int i : array)
+    {
+        treap.insert(i);
+    }
+    finish = clock();
+    cout << "Treap clock time(random insert): " << finish-start << endl;
+
+    std::shuffle(array.begin(), array.end(), std::default_random_engine(seed));
+
+    start = clock();
+    for(int i : array)
+    {
+        treap.remove(i);
+    }
+    finish = clock();
+    cout << "Treap clock time(remove): " << finish-start << endl;
+    cout << "Treap remains " << treap.size() << endl;
+}
+
+void splay_test()
+{
+    std::array<int, 10000> array{};  // 顺序数组
+    for(int i = 0; i < 10000; i++)
+        array[i] = i;
+
+    clock_t start = clock();
+    Splay<int> splay(array);
+    clock_t finish = clock();
+    cout << "Splay clock time(serial insert): " << finish-start << endl;
+
+
+    unsigned seed = start;
+    std::shuffle(array.begin(), array.end(), std::default_random_engine(seed));
+
+    splay.clear();
+    start = clock();
+    for(int i : array)
+    {
+        splay.insert(i);
+    }
+    finish = clock();
+    cout << "Splay clock time(random insert): " << finish-start << endl;
+
+    std::shuffle(array.begin(), array.end(), std::default_random_engine(seed));
+
+    start = clock();
+    for(int i : array)
+    {
+        splay.remove(i);
+    }
+    finish = clock();
+    cout << "Splay clock time(random remove): " << finish-start << endl;
+    cout << "Splay remains " << splay.size() << endl;
 }
 
 void AVLTree_test()

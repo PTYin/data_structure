@@ -6,6 +6,8 @@
 #define DATA_STRUCTURE_SEARCHTREE_HPP
 
 #include "BinaryTree.hpp"
+#define PARENT_REFERENCE(x) (x->fa() ? ( (x->fa()->left() == x ? x->fa()->left() : x->fa()->right()) ) : this->root)
+#define IS_LCHILD(x)        (x->fa()->left() == x)
 
 namespace pty
 {
@@ -40,6 +42,16 @@ namespace pty
                 succ = succ->left();
             }
             return succ;
+        }
+
+        BinaryTree <T, Node> &secede(Node *node) override
+        {
+            return *this;
+        }
+
+        void insert(Node *fa, const T &_value, bool insert_as_left_child) override
+        {
+            insert(_value);
         }
 
     public:
@@ -137,10 +149,6 @@ namespace pty
             return kth;
         }
 
-        virtual void insert(Node *fa, const T &_value, bool insert_as_left_child) override
-        {
-            insert(_value);
-        }
 
         virtual void insert(const T &value)
         {
@@ -198,7 +206,7 @@ namespace pty
             if (succ)
                 succ->fa() = node->fa();
             if (node->fa())
-                node->fa()->left() == node ? node->fa()->left() = succ : node->fa()->right() = succ;
+                IS_LCHILD(node) ? node->fa()->left() = succ : node->fa()->right() = succ;
             else  // 删除根节点
                 this->root = succ;
             this->n--;
@@ -207,6 +215,7 @@ namespace pty
             return 1;
         }
 
+        using BinaryTree<T, Node>::clear;
         using BinaryTree<T, Node>::size;
         using BinaryTree<T, Node>::is_empty;
 

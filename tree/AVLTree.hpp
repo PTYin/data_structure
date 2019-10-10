@@ -10,8 +10,6 @@
 #define STATURE(p)          (p ? p->height : 0)
 #define FACTOR(x)           (STATURE(x->left())-STATURE(x->right()))
 #define AVL_BALANCED(x)     (-2 < FACTOR(x) && FACTOR(x) < 2)
-#define PARENT_REFERENCE(x) (x->fa() ? ( (x->fa()->left() == x ? x->fa()->left() : x->fa()->right()) ) : this->root)
-#define IS_LCHILD(x)        (x->fa()->left() == x)
 
 namespace pty
 {
@@ -113,11 +111,7 @@ namespace pty
             for (auto iterator = container.begin(); iterator != container.end(); iterator++)
                 insert(*iterator);
         }
-        // 重载父类插入方法
-        void insert(Node *fa, const T &_value, bool insert_as_left_child) override
-        {
-            insert(_value);
-        }
+
         // 插入节点
         void insert(const T &value) override
         {

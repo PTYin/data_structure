@@ -128,6 +128,14 @@ namespace pty
                            { delete (node); });
         }
 
+        void clear()
+        {
+            traversal_post([](Node *node)
+                           { delete (node); });
+            n = 0;
+            root = nullptr;
+        }
+
         //  插入到某节点的儿子节点处
         virtual void insert(Node *fa, const T &_value, bool insert_as_left_child)
         {

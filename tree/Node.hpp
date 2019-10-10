@@ -17,6 +17,9 @@ namespace pty
     template<typename T>
     class AVLTreeNode;
 
+    template<typename T>
+    class TreapNode;
+
     template<typename T, typename Node=PrimitiveNode<T>>
     class BinaryTree;
 
@@ -31,9 +34,12 @@ namespace pty
 
     template<typename T, typename Node=AVLTreeNode<T>>
     class AVLTree;
-//    template <typename T>
-//    class AVLTree;
 
+    template<typename T, typename Node=TreapNode<T>>  // TODO
+    class Treap;
+
+    template<typename T, typename Node=PrimitiveNode<T>>
+    class Splay;
 
     /*
      * 节点类
@@ -46,11 +52,11 @@ namespace pty
 
         friend class BinaryTree<T, Node>;
 
-        friend class ThreadedBinaryTree<T, Node>;
-
         friend class SearchTree<T, Node>;
 
         friend class HuffmanTree<T, Node>;
+
+        friend class Splay<T, Node>;
 
     protected:
         T value;
@@ -67,17 +73,17 @@ namespace pty
         T get() const
         { return value; }
 
-        auto left() -> decltype(this) &
+        PrimitiveNode *&left()
         {
             return (decltype(this) &) left_child;
         }
 
-        auto right() -> decltype(this) &
+        PrimitiveNode *&right()
         {
             return (decltype(this) &) right_child;
         }
 
-        auto fa() -> decltype(this) &
+        PrimitiveNode *&fa()
         {
             return (decltype(this) &) father;
         }
@@ -158,10 +164,6 @@ namespace pty
 
         friend class ThreadedBinaryTree<T, Node>;
 
-        friend class SearchTree<T, Node>;
-
-        friend class HuffmanTree<T, Node>;
-
     protected:
         bool LTag;
         bool RTag;
@@ -171,18 +173,18 @@ namespace pty
                 PrimitiveNode<T>(_value, _father, _left_child, _right_child), LTag(false), RTag(false)
         {}
 
-        auto fa() -> decltype(this) &
+        ThreadedNode *&fa()
         {
             decltype(this) null = nullptr;
             return (decltype(this) &) null;
         }
 
-        auto left() -> decltype(this) &
+        ThreadedNode *&left()
         {
             return (decltype(this) &) this->left_child;
         }
 
-        auto right() -> decltype(this) &
+        ThreadedNode *&right()
         {
             return (decltype(this) &) this->right_child;
         }
@@ -225,15 +227,10 @@ namespace pty
 
         friend class BinaryTree<T, Node>;
 
-        friend class ThreadedBinaryTree<T, Node>;
-
         friend class SearchTree<T, Node>;
-
-        friend class HuffmanTree<T, Node>;
 
         friend class AVLTree<T, Node>;
 
-//        friend class AVLTree<T>;
 
     protected:
 
@@ -290,6 +287,72 @@ namespace pty
                 }
             }
         }
+    };
+
+    template <typename T>
+    class TreapNode : protected PrimitiveNode<T>
+    {
+        using Node = TreapNode<T>;
+
+        friend class BinaryTree<T, Node>;
+
+        friend class SearchTree<T, Node>;
+
+        friend class Treap<T, Node>; // TODO
+
+    protected:
+        int key;
+        explicit TreapNode(const T &_value, void *_father = nullptr, void *_left_child = nullptr,
+                             void *_right_child = nullptr) : PrimitiveNode<T>(_value, _father, _left_child,
+                                                                              _right_child),key(rand())
+        {}
+
+        TreapNode *&left()
+        {
+            return (decltype(this) &) this->left_child;
+        }
+
+        TreapNode *&right()
+        {
+            return (decltype(this) &) this->right_child;
+        }
+
+        TreapNode *&fa()
+        {
+            return (decltype(this) &) this->father;
+        }
+
+        // 以该节点为根节点进行遍历（前序、中序、后序）
+        template<typename F>
+        void traversal(F const &callback, int type)
+        {
+            Stack<decltype(this)> container({this});
+            Stack<decltype(this)> visited;
+            while (!container.is_empty())
+            {
+                decltype(this) node = container.pop();
+                if (!visited.is_empty() && visited.top() == node)  // 访问过
+                {
+                    visited.pop();
+                    callback(node);
+                }
+                else
+                {
+                    visited.push(node);
+                    if (type == 2)
+                        container.push(node);
+                    if (node->right_child)
+                        container.push(node->right());
+                    if (type == 1)
+                        container.push(node);
+                    if (node->left_child)
+                        container.push(node->left());
+                    if (type == 0)
+                        container.push(node);
+                }
+            }
+        }
+
     };
 }
 #endif //DATA_STRUCTURE_NODE_HPP
