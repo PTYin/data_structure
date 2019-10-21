@@ -6,8 +6,8 @@
 #define DATA_STRUCTURE_HUFFMANTREE_HPP
 
 #include "BinaryTree.hpp"
-#include "../Stack.hpp"
-#include "../Heap.hpp"
+#include "../primitive/Stack.hpp"
+#include "../primitive/Heap.hpp"
 
 namespace pty
 {

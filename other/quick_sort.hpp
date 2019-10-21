@@ -1,8 +1,8 @@
 //
 // Created by Peter on 2019/9/15.
 //
-#include "Stack.hpp"
-#include "Queue.hpp"
+#include "../primitive/Stack.hpp"
+#include "../primitive/Queue.hpp"
 #include <algorithm>
 
 namespace pty
@@ -15,8 +15,8 @@ namespace pty
         e2 = temp;
     }
 
-    template<typename T>
-    void quick_sort_stack(T array[], int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
+    template<typename T, typename CONTAINER>
+    void quick_sort_stack(CONTAINER array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
     { return e1 < e2; })  // 去递归，用栈实现
     {
         using std::pair;
@@ -45,8 +45,8 @@ namespace pty
         }
     }
 
-    template<typename T>
-    void quick_sort_queue(T array[], int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
+    template<typename T, typename CONTAINER>
+    void quick_sort_queue(CONTAINER array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
     { return e1 < e2; })  // 去递归，用栈实现
     {
         using std::pair;
@@ -75,8 +75,8 @@ namespace pty
         }
     }
 
-    template<typename T>
-    void quick_sort_recursive(T array[], int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
+    template<typename T, typename CONTAINER>
+    void quick_sort_recursive(CONTAINER array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
     { return e1 < e2; })
     {
         if (left >= right)

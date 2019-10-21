@@ -20,6 +20,9 @@ namespace pty
     template<typename T>
     class TreapNode;
 
+    template <typename T>
+    class RedBlackNode;
+
     template<typename T, typename Node=PrimitiveNode<T>>
     class BinaryTree;
 
@@ -35,12 +38,14 @@ namespace pty
     template<typename T, typename Node=AVLTreeNode<T>>
     class AVLTree;
 
-    template<typename T, typename Node=TreapNode<T>>  // TODO
+    template<typename T, typename Node=TreapNode<T>>
     class Treap;
 
     template<typename T, typename Node=PrimitiveNode<T>>
     class Splay;
 
+    template <typename T>  // TODO
+    class RedBlack;
     /*
      * 节点类
      * 重载比较运算符
@@ -257,6 +262,8 @@ namespace pty
             return (decltype(this) &) this->father;
         }
 
+        using PrimitiveNode<T>::get;
+
         // 以该节点为根节点进行遍历（前序、中序、后序）
         template<typename F>
         void traversal(F const &callback, int type)
@@ -322,6 +329,8 @@ namespace pty
             return (decltype(this) &) this->father;
         }
 
+        using PrimitiveNode<T>::get;
+
         // 以该节点为根节点进行遍历（前序、中序、后序）
         template<typename F>
         void traversal(F const &callback, int type)
@@ -353,6 +362,74 @@ namespace pty
             }
         }
 
+    };
+
+    typedef enum {RED, BLACK} Color;
+
+    template <typename T>
+    class RedBlackNode :  protected AVLTreeNode<T>
+    {
+        using Node = RedBlackNode<T>;
+
+        friend class BinaryTree<T, Node>;
+
+        friend class SearchTree<T, Node>;
+
+        friend class RedBlack<T>; // TODO
+
+    protected:
+
+        Color color;
+        explicit RedBlackNode(const T &_value, void *_father = nullptr, void *_left_child = nullptr,
+                           void *_right_child = nullptr) : AVLTreeNode<T>(_value, _father, _left_child,
+                                                                            _right_child),color(RED)
+        {}
+
+        Node *&left()
+        {
+            return (decltype(this) &) this->left_child;
+        }
+
+        Node *&right()
+        {
+            return (decltype(this) &) this->right_child;
+        }
+
+        Node *&fa()
+        {
+            return (decltype(this) &) this->father;
+        }
+
+        // 以该节点为根节点进行遍历（前序、中序、后序）
+        template<typename F>
+        void traversal(F const &callback, int type)
+        {
+            Stack<decltype(this)> container({this});
+            Stack<decltype(this)> visited;
+            while (!container.is_empty())
+            {
+                decltype(this) node = container.pop();
+                if (!visited.is_empty() && visited.top() == node)  // 访问过
+                {
+                    visited.pop();
+                    callback(node);
+                }
+                else
+                {
+                    visited.push(node);
+                    if (type == 2)
+                        container.push(node);
+                    if (node->right_child)
+                        container.push(node->right());
+                    if (type == 1)
+                        container.push(node);
+                    if (node->left_child)
+                        container.push(node->left());
+                    if (type == 0)
+                        container.push(node);
+                }
+            }
+        }
     };
 }
 #endif //DATA_STRUCTURE_NODE_HPP

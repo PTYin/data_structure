@@ -2,11 +2,11 @@
 #include <random>
 #include <time.h>
 
-#include "DoubleLinkedList.hpp"
-#include "Stack.hpp"
-#include "Queue.hpp"
-#include "Heap.hpp"
-#include "quick_sort.hpp"
+#include "primitive/DoubleLinkedList.hpp"
+#include "primitive/Stack.hpp"
+#include "primitive/Queue.hpp"
+#include "primitive/Heap.hpp"
+#include "other/quick_sort.hpp"
 #include "tree/BinaryTree.hpp"
 #include "tree/ThreadedBinaryTree.hpp"
 #include "tree/SearchTree.hpp"
@@ -14,6 +14,7 @@
 #include "tree/AVLTree.hpp"
 #include "tree/Splay.hpp"
 #include "tree/Treap.hpp"
+#include "string/KMP.hpp"
 
 using namespace pty;
 using std::cout;
@@ -43,6 +44,8 @@ void splay_test();
 
 void treap_test();
 
+void KMP_test();
+
 int main()
 {
     cout << endl << "DoubleLinkedList:##########################" << endl;
@@ -69,7 +72,20 @@ int main()
     splay_test();
     cout << endl << "treap:##########################" << endl;
     treap_test();
+    cout << endl << "KMP:##########################" << endl;
+    KMP_test();
     return 0;
+}
+
+void KMP_test()
+{
+    KMP kmp("peter");
+    cout << kmp.findIn("hello, peter") << endl;
+    cout << kmp.findIn("hello, jason") << endl;
+    kmp.setPattern("jason");
+    cout << kmp.findIn("hello, jason, jason") << endl;
+    kmp.setPattern("bbbpapaccd");
+    cout << kmp.findIn("0123bbbpapaccd121") << endl;
 }
 
 void treap_test()

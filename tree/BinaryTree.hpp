@@ -6,8 +6,8 @@
 #define DATA_STRUCTURE_BINARYTREE_HPP
 
 #include <iostream>
-#include "../Stack.hpp"
-#include "../Queue.hpp"
+#include "../primitive/Stack.hpp"
+#include "../primitive/Queue.hpp"
 #include "Node.hpp"
 
 namespace pty
@@ -170,7 +170,7 @@ namespace pty
         }
 
         // 将以node节点为根节点的子树从当前树种摘除，并将其转换为一棵独立的树
-        virtual BinaryTree &secede(Node *node)
+        virtual BinaryTree<T, Node> &secede(Node *node)
         {
             auto new_tree = new BinaryTree(root->value);
             int count = 0;
