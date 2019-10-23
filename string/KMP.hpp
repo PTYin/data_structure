@@ -18,7 +18,7 @@ namespace pty
         void buildNext()
         {
             int j=0;
-            next = new int[m];
+            next = new int[m+1];
             int t = next[0] = -1;
             while (j < m)
             {
@@ -36,7 +36,7 @@ namespace pty
         explicit KMP(const char* pattern_ = nullptr) : pattern(nullptr), next(nullptr)
         {
             m = strlen(pattern_);
-            pattern = new char[m];
+            pattern = new char[m+1];
             strcpy(pattern, pattern_);
             buildNext();
         }
@@ -51,12 +51,18 @@ namespace pty
         {
             m = strlen(pattern_);
             if(m <= strlen(pattern))
+            {
                 strcpy(pattern, pattern_);
+                buildNext();
+            }
             else
             {
                 delete[] pattern;
-                pattern = new char[m];
+                delete[] next;
+                pattern = new char[m+1];
+                next = new int[m+1];
                 strcpy(pattern, pattern_);
+                buildNext();
             }
         }
 

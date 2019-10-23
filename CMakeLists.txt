@@ -19,5 +19,5 @@ set(SRC main.cpp
         tree/Treap.hpp
         tree/Splay.hpp
         tree/RedBlack.hpp
-        string/KMP.hpp)
+        string/KMP.hpp other/dijkstra.hpp)
 add_executable(usage ${SRC})

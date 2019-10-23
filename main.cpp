@@ -1,6 +1,6 @@
 #include <cstring>
 #include <random>
-#include <time.h>
+#include <ctime>
 
 #include "primitive/DoubleLinkedList.hpp"
 #include "primitive/Stack.hpp"
@@ -15,6 +15,7 @@
 #include "tree/Splay.hpp"
 #include "tree/Treap.hpp"
 #include "string/KMP.hpp"
+#include "other/dijkstra.hpp"
 
 using namespace pty;
 using std::cout;
@@ -46,35 +47,74 @@ void treap_test();
 
 void KMP_test();
 
+void dijkstra_test();
+
 int main()
 {
-    cout << endl << "DoubleLinkedList:##########################" << endl;
-    doubleLinkedList_test();
-    cout << endl << "Stack:##########################" << endl;
-    stack_test();
-    cout << endl << "Queue:##########################" << endl;
-    queue_test();
-    cout << endl << "Heap:##########################" << endl;
-    heap_test();
-    cout << endl << "quick_sort:##########################" << endl;
-    quick_sort_test();
-    cout << endl << "BinaryTree:##########################" << endl;
-    binaryTree_test();
-    cout << endl << "ThreadedBinaryTree:##########################" << endl;
-    threadedBinaryTree_test();
-    cout << endl << "SearchTree:##########################" << endl;
-    searchTree_test();
-    cout << endl << "HuffmanTree:##########################" << endl;
-    huffmanTree_test();
-    cout << endl << "AVLTree:##########################" << endl;
-    AVLTree_test();
-    cout << endl << "Splay:##########################" << endl;
-    splay_test();
-    cout << endl << "treap:##########################" << endl;
-    treap_test();
+//    cout << endl << "DoubleLinkedList:##########################" << endl;
+//    doubleLinkedList_test();
+//    cout << endl << "Stack:##########################" << endl;
+//    stack_test();
+//    cout << endl << "Queue:##########################" << endl;
+//    queue_test();
+//    cout << endl << "Heap:##########################" << endl;
+//    heap_test();
+//    cout << endl << "quick_sort:##########################" << endl;
+//    quick_sort_test();
+//    cout << endl << "BinaryTree:##########################" << endl;
+//    binaryTree_test();
+//    cout << endl << "ThreadedBinaryTree:##########################" << endl;
+//    threadedBinaryTree_test();
+//    cout << endl << "SearchTree:##########################" << endl;
+//    searchTree_test();
+//    cout << endl << "HuffmanTree:##########################" << endl;
+//    huffmanTree_test();
+//    cout << endl << "AVLTree:##########################" << endl;
+//    AVLTree_test();
+//    cout << endl << "Splay:##########################" << endl;
+//    splay_test();
+//    cout << endl << "treap:##########################" << endl;
+//    treap_test();
     cout << endl << "KMP:##########################" << endl;
     KMP_test();
+    cout << endl << "dijkstra:##########################" << endl;
+    dijkstra_test();
     return 0;
+}
+
+void dijkstra_test()
+{
+    std::vector<dijkstra::Edge> edges[6];
+    edges[1].emplace_back(2, 2);
+    edges[2].emplace_back(1, 2);
+
+    edges[1].emplace_back(3, 5);
+    edges[3].emplace_back(1, 5);
+
+    edges[1].emplace_back(4, 8);
+    edges[4].emplace_back(1, 8);
+
+    edges[2].emplace_back(3, 2);
+    edges[3].emplace_back(2, 2);
+
+    edges[2].emplace_back(5, 8);
+    edges[5].emplace_back(2, 8);
+
+    edges[3].emplace_back(4, 3);
+    edges[4].emplace_back(3, 3);
+
+    edges[3].emplace_back(5, 6);
+    edges[5].emplace_back(3, 6);
+
+    edges[4].emplace_back(5, 2);
+    edges[5].emplace_back(4, 2);
+    int* dis = dijkstra::dijkstra(1, 5, edges);
+    for(int i=1;i<=5;i++)
+    {
+        cout << "1 to " << i << ": " << dis[i] << endl;
+    }
+
+    delete[] dis;
 }
 
 void KMP_test()
