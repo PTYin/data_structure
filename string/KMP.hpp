@@ -33,7 +33,7 @@ namespace pty
         }
 
     public:
-        explicit KMP(const char* pattern_ = nullptr) : pattern(nullptr), next(nullptr)
+        explicit KMP(const char* pattern_) : pattern(nullptr), next(nullptr)
         {
             m = strlen(pattern_);
             pattern = new char[m+1];
