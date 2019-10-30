@@ -17,11 +17,20 @@ namespace pty
         {
             T val;
             Node* fa;
-            Node():fa(this){std::cout << "Default Node created!";}
+            Node():fa(this){}
 
             explicit Node(T _val) : val(_val), fa(this){}
 
-//            Node(Node&& o) : fa(this), val(o.val){}
+            Node(const Node& o) : fa(this), val(o.val){}
+
+            Node(const Node&& o) : fa(this), val(o.val){}
+
+            Node& operator=(const Node& o)
+            {
+                val = o.val;
+                fa = this;
+                return *this;
+            }
 
             Node* findRoot()
             {
@@ -56,42 +65,31 @@ namespace pty
 
         };
 
-        template <typename T>
+        template <typename Index, typename Value=Index>
         class DisjointSets
         {
         private:
-            int n;
-            Node<T>* nodes;
+            map<Index, Node<Value>> nodes;
         public:
 
-            DisjointSets():n(0),nodes(nullptr){}
+            DisjointSets():nodes(){}
 
-            explicit DisjointSets(int _size) : n(_size)
+            unsigned long long size() const
             {
-                nodes = new Node<T>[_size];
+                return nodes.size();
             }
 
-            virtual ~DisjointSets()
+            Node<Index>* begin() const
             {
-                delete[] nodes;
+                return nodes.begin();
             }
 
-            int size() const
+            Node<Index>* end() const
             {
-                return n;
+                return nodes.end();
             }
 
-            Node<T>* begin() const
-            {
-                return nodes;
-            }
-
-            Node<T>* end() const
-            {
-                return nodes + n;
-            }
-
-            Node<T>& operator[](int index)
+            Node<Index>& operator[](Index index)
             {
                 return nodes[index];
             }

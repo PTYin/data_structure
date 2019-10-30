@@ -54,34 +54,34 @@ void kruskal_test();
 
 int main()
 {
-//    cout << endl << "DoubleLinkedList:##########################" << endl;
-//    doubleLinkedList_test();
-//    cout << endl << "Stack:##########################" << endl;
-//    stack_test();
-//    cout << endl << "Queue:##########################" << endl;
-//    queue_test();
-//    cout << endl << "Heap:##########################" << endl;
-//    heap_test();
+    cout << endl << "DoubleLinkedList:##########################" << endl;
+    doubleLinkedList_test();
+    cout << endl << "Stack:##########################" << endl;
+    stack_test();
+    cout << endl << "Queue:##########################" << endl;
+    queue_test();
+    cout << endl << "Heap:##########################" << endl;
+    heap_test();
     cout << endl << "quick_sort:##########################" << endl;
     quick_sort_test();
-//    cout << endl << "BinaryTree:##########################" << endl;
-//    binaryTree_test();
-//    cout << endl << "ThreadedBinaryTree:##########################" << endl;
-//    threadedBinaryTree_test();
-//    cout << endl << "SearchTree:##########################" << endl;
-//    searchTree_test();
-//    cout << endl << "HuffmanTree:##########################" << endl;
-//    huffmanTree_test();
-//    cout << endl << "AVLTree:##########################" << endl;
-//    AVLTree_test();
-//    cout << endl << "Splay:##########################" << endl;
-//    splay_test();
-//    cout << endl << "treap:##########################" << endl;
-//    treap_test();
-//    cout << endl << "KMP:##########################" << endl;
-//    KMP_test();
-//    cout << endl << "dijkstra:##########################" << endl;
-//    dijkstra_test();
+    cout << endl << "BinaryTree:##########################" << endl;
+    binaryTree_test();
+    cout << endl << "ThreadedBinaryTree:##########################" << endl;
+    threadedBinaryTree_test();
+    cout << endl << "SearchTree:##########################" << endl;
+    searchTree_test();
+    cout << endl << "HuffmanTree:##########################" << endl;
+    huffmanTree_test();
+    cout << endl << "AVLTree:##########################" << endl;
+    AVLTree_test();
+    cout << endl << "Splay:##########################" << endl;
+    splay_test();
+    cout << endl << "treap:##########################" << endl;
+    treap_test();
+    cout << endl << "KMP:##########################" << endl;
+    KMP_test();
+    cout << endl << "dijkstra:##########################" << endl;
+    dijkstra_test();
     cout << endl << "kruskal:##########################" << endl;
     kruskal_test();
 
@@ -106,11 +106,12 @@ void kruskal_test()
     edges.emplace_back('E', 'H', 8);
     edges.emplace_back('F', 'H', 7);
     edges.emplace_back('G', 'H', 14);
-    std::vector<kruskal::Edge<int>> trace = kruskal::kruskal(edges);
+    std::vector<kruskal::Edge<int>>& trace = kruskal::kruskal(edges);
     for(auto edge:trace)
     {
-        cout << edge.from.value() << "<->" << edge.to.value() << ": " << edge.weight << endl;
+        cout << (char)edge.from << "<->" << (char)edge.to << ": " << edge.weight << endl;
     }
+
     delete &trace;
 }
 

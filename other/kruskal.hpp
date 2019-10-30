@@ -13,24 +13,33 @@ namespace pty
 {
     namespace kruskal
     {
-        template <typename T>
+
+        template <typename Vertex>
+        DisjointSet::DisjointSets<Vertex> nodes;
+
+        template <typename T, typename Vertex=int>
         struct Edge
         {
-            DisjointSet::Node<int> from, to;
+//            DisjointSet::Node<int> from, to;
+            Vertex from, to;
             T weight;
-            Edge(int _from, int _to, T _weight):from(_from), to(_to),weight(_weight){}
-
-            Edge(const Edge& o) : weight(o.weight),from(o.from.val), to(o.to.val){}  // 拷贝构造函数，必须写
-
-            Edge(const Edge&& o) noexcept : weight(o.weight),from(o.from.val), to(o.to.val){}  // 移动构造函数，必须写，否则vector移动元素时会出错
-
-            Edge& operator=(const Edge& o)  // 赋值运算符，防止排序的时候把from和to节点的fa属性也给改了
+            Edge(Vertex _from, Vertex _to, T _weight):from(_from), to(_to),weight(_weight)
             {
-                weight = o.weight;
-                from.val = o.from.val;
-                to.val = o.to.val;
-                return *this;
+                nodes<Vertex>[from] = std::move(DisjointSet::Node<Vertex>());
+                nodes<Vertex>[to] = std::move(DisjointSet::Node<Vertex>());
             }
+
+//            Edge(const Edge& o) : weight(o.weight),from(o.from.val), to(o.to.val){}  // 拷贝构造函数，必须写
+//
+//            Edge(const Edge&& o) noexcept : weight(o.weight),from(o.from.val), to(o.to.val){}  // 移动构造函数，必须写，否则vector移动元素时会出错
+//
+//            Edge& operator=(const Edge& o)  // 赋值运算符，防止排序的时候把from和to节点的fa属性也给改了
+//            {
+//                weight = o.weight;
+//                from.val = o.from.val;
+//                to.val = o.to.val;
+//                return *this;
+//            }
 
             bool operator<(const Edge& o) const
             {
@@ -38,12 +47,12 @@ namespace pty
             }
         };
 
-        template <typename T>
-        static std::vector<Edge<T>>& init()
+        template <typename T, typename Vertex>
+        static std::vector<Edge<T, Vertex>>& init()
         {
             int m;
             std::cin >> m;
-            auto *edges = new std::vector<Edge<T>>;
+            auto *edges = new std::vector<Edge<T, Vertex>>;
 
             for(int i=1;i<=m;i++)
             {
@@ -55,24 +64,29 @@ namespace pty
             return *edges;
         }
 
-        template <typename T>
-        std::vector<Edge<T>>& kruskal(std::vector<Edge<T>>& edges)  // don't forget to delete
+        template <typename T, typename Vertex=int>
+        std::vector<Edge<T, Vertex>>& kruskal(std::vector<Edge<T, Vertex>>& edges)  // don't forget to delete
         {
-            auto* trace = new std::vector<Edge<T>>;
+            using Edge = Edge<T, Vertex>;
+            
+            auto* trace = new std::vector<Edge>;
+            bool toDelete = false;
             if(edges.empty())
             {
-                edges = init<T>();
+                edges = init<T, Vertex>();
+                toDelete = true;
             }
-//            std::sort(edges.begin(), edges.end()-1);
-            quick_sort_recursive<Edge<T>&>(edges, 0, edges.size()-1);
-            for(Edge<T> edge:edges)
+            quick_sort_recursive<Edge&>(edges, 0, edges.size()-1);
+            for(Edge edge:edges)
             {
-                if(edge.from.equivalent(edge.to))  // 在一个集合里而不是相等
+                if(nodes<Vertex>[edge.from].equivalent(nodes<Vertex>[edge.to]))  // 在一个集合里而不是相等
                     continue;
-                edge.from.join(edge.to);
+                nodes<Vertex>[edge.from].join(nodes<Vertex>[edge.to]);
                 trace->push_back(edge);
             }
-            delete &edges;
+            if(toDelete)
+                delete &edges;
+
             return *trace;
         }
 
