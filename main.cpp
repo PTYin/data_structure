@@ -16,6 +16,7 @@
 #include "tree/Treap.hpp"
 #include "string/KMP.hpp"
 #include "other/dijkstra.hpp"
+#include "other/kruskal.hpp"
 
 using namespace pty;
 using std::cout;
@@ -49,6 +50,8 @@ void KMP_test();
 
 void dijkstra_test();
 
+void kruskal_test();
+
 int main()
 {
 //    cout << endl << "DoubleLinkedList:##########################" << endl;
@@ -59,8 +62,8 @@ int main()
 //    queue_test();
 //    cout << endl << "Heap:##########################" << endl;
 //    heap_test();
-//    cout << endl << "quick_sort:##########################" << endl;
-//    quick_sort_test();
+    cout << endl << "quick_sort:##########################" << endl;
+    quick_sort_test();
 //    cout << endl << "BinaryTree:##########################" << endl;
 //    binaryTree_test();
 //    cout << endl << "ThreadedBinaryTree:##########################" << endl;
@@ -75,11 +78,40 @@ int main()
 //    splay_test();
 //    cout << endl << "treap:##########################" << endl;
 //    treap_test();
-    cout << endl << "KMP:##########################" << endl;
-    KMP_test();
-    cout << endl << "dijkstra:##########################" << endl;
-    dijkstra_test();
+//    cout << endl << "KMP:##########################" << endl;
+//    KMP_test();
+//    cout << endl << "dijkstra:##########################" << endl;
+//    dijkstra_test();
+    cout << endl << "kruskal:##########################" << endl;
+    kruskal_test();
+
     return 0;
+}
+
+void kruskal_test()
+{
+    std::vector<kruskal::Edge<int>> edges;
+    edges.emplace_back('A', 'B', 4);
+    edges.emplace_back('A', 'D', 6);
+    edges.emplace_back('A', 'G', 7);
+    edges.emplace_back('B', 'C', 12);
+    edges.emplace_back('C', 'D', 9);
+    edges.emplace_back('C', 'E', 1);
+    edges.emplace_back('C', 'F', 2);
+    edges.emplace_back('C', 'H', 10);
+    edges.emplace_back('D', 'E', 13);
+    edges.emplace_back('D', 'G', 2);
+    edges.emplace_back('E', 'F', 5);
+    edges.emplace_back('E', 'G', 11);
+    edges.emplace_back('E', 'H', 8);
+    edges.emplace_back('F', 'H', 7);
+    edges.emplace_back('G', 'H', 14);
+    std::vector<kruskal::Edge<int>> trace = kruskal::kruskal(edges);
+    for(auto edge:trace)
+    {
+        cout << edge.from.value() << "<->" << edge.to.value() << ": " << edge.weight << endl;
+    }
+    delete &trace;
 }
 
 void dijkstra_test()
@@ -350,9 +382,12 @@ void binaryTree_test()
 
 void quick_sort_test()
 {
-    int array[] = {3, 5, 1, 4, 100, 43, 0x7fffffff, 12113, 12, 12, 1, 1, 33, 912};
+//    int array[] = {3, 5, 1, 4, 100, 43, 0x7fffffff, 12113, 12, 12, 1, 1, 33, 912};
+//    std::array<int, 14> array = {3, 5, 1, 4, 100, 43, 0x7fffffff, 12113, 12, 12, 1, 1, 33, 912};
+    std::array<int, 15> array = {4, 6, 7, 12, 9, 1, 2, 10, 13, 2, 5, 11, 8, 7, 14};
     // 用递归实现快排
-    quick_sort_recursive<int>(array, 0, sizeof(array) / sizeof(int) - 1);
+//    quick_sort_recursive<int>(array, 0, sizeof(array) / sizeof(int) - 1);
+    quick_sort_recursive<int>(array, 0, array.size()-1);
     cout << "!!!Recursive Quick Sort:";
     for (int i : array)
         cout << i << " ";

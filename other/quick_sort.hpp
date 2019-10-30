@@ -16,7 +16,7 @@ namespace pty
     }
 
     template<typename T, typename CONTAINER>
-    void quick_sort_stack(CONTAINER array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
+    void quick_sort_stack(CONTAINER& array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
     { return e1 < e2; })  // 去递归，用栈实现
     {
         using std::pair;
@@ -29,24 +29,23 @@ namespace pty
                 continue;
             T &pivot = array[_left];
             int l = _left + 1, r = _right;
-            while (l < r)
+            while (l < r)// post_condition: l == r + 1
             {
-                while (l <= _right && comparator(array[l], pivot))
+                while (l < r && !comparator(pivot, array[l]))
                     l++;
-                while (r >= _left && comparator(pivot, array[r]))
+                while (l <= r && !comparator(array[r], pivot))
                     r--;
-
                 if (l < r)
-                    swap(array[l++], array[r--]);
+                    swap(array[l], array[r]);
             }
-            if (!comparator(pivot, array[r]))
+            if (comparator(array[r], pivot))
                 swap(pivot, array[r]);
             _stack.push_all({pair<int, int>(_left, r - 1), pair<int, int>(r + 1, _right)});
         }
     }
 
     template<typename T, typename CONTAINER>
-    void quick_sort_queue(CONTAINER array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
+    void quick_sort_queue(CONTAINER& array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
     { return e1 < e2; })  // 去递归，用栈实现
     {
         using std::pair;
@@ -59,24 +58,23 @@ namespace pty
                 continue;
             T &pivot = array[_left];
             int l = _left + 1, r = _right;
-            while (l < r)
+            while (l < r)// post_condition: l == r + 1
             {
-                while (l <= _right && comparator(array[l], pivot))
+                while (l < r && !comparator(pivot, array[l]))
                     l++;
-                while (r >= _left && comparator(pivot, array[r]))
+                while (l <= r && !comparator(array[r], pivot))
                     r--;
-
                 if (l < r)
-                    swap(array[l++], array[r--]);
+                    swap(array[l], array[r]);
             }
-            if (!comparator(pivot, array[r]))
+            if (comparator(array[r], pivot))
                 swap(pivot, array[r]);
             queue.push_all({pair<int, int>(_left, r - 1), pair<int, int>(r + 1, _right)});
         }
     }
 
     template<typename T, typename CONTAINER>
-    void quick_sort_recursive(CONTAINER array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
+    void quick_sort_recursive(CONTAINER& array, int left, int right, bool (*comparator)(T, T) = [](T e1, T e2) -> bool
     { return e1 < e2; })
     {
         if (left >= right)
@@ -85,14 +83,14 @@ namespace pty
         int l = left + 1, r = right;
         while (l < r)// post_condition: l == r + 1
         {
-            while (l <= right && comparator(array[l], pivot))
+            while (l < r && !comparator(pivot, array[l]))
                 l++;
-            while (r >= left && comparator(pivot, array[r]))
+            while (l <= r && !comparator(array[r], pivot))
                 r--;
             if (l < r)
-                swap(array[l++], array[r--]);
+                swap(array[l], array[r]);
         }
-        if (!comparator(pivot, array[r]))
+        if (comparator(array[r], pivot))
             swap(pivot, array[r]);
         quick_sort_recursive(array, left, r - 1, comparator);
         quick_sort_recursive(array, r + 1, right, comparator);
