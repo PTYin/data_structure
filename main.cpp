@@ -15,8 +15,9 @@
 #include "tree/Splay.hpp"
 #include "tree/Treap.hpp"
 #include "string/KMP.hpp"
-#include "other/dijkstra.hpp"
-#include "other/kruskal.hpp"
+#include "graph/dijkstra.hpp"
+#include "graph/kruskal.hpp"
+#include "graph/Hierholzer.hpp"
 
 using namespace pty;
 using std::cout;
@@ -52,40 +53,72 @@ void dijkstra_test();
 
 void kruskal_test();
 
+void hierholzer_test();
+
 int main()
 {
-    cout << endl << "DoubleLinkedList:##########################" << endl;
-    doubleLinkedList_test();
-    cout << endl << "Stack:##########################" << endl;
-    stack_test();
-    cout << endl << "Queue:##########################" << endl;
-    queue_test();
-    cout << endl << "Heap:##########################" << endl;
-    heap_test();
-    cout << endl << "quick_sort:##########################" << endl;
-    quick_sort_test();
-    cout << endl << "BinaryTree:##########################" << endl;
-    binaryTree_test();
-    cout << endl << "ThreadedBinaryTree:##########################" << endl;
-    threadedBinaryTree_test();
-    cout << endl << "SearchTree:##########################" << endl;
-    searchTree_test();
-    cout << endl << "HuffmanTree:##########################" << endl;
-    huffmanTree_test();
-    cout << endl << "AVLTree:##########################" << endl;
-    AVLTree_test();
-    cout << endl << "Splay:##########################" << endl;
-    splay_test();
-    cout << endl << "treap:##########################" << endl;
-    treap_test();
-    cout << endl << "KMP:##########################" << endl;
-    KMP_test();
-    cout << endl << "dijkstra:##########################" << endl;
-    dijkstra_test();
-    cout << endl << "kruskal:##########################" << endl;
-    kruskal_test();
+//    cout << endl << "DoubleLinkedList:##########################" << endl;
+//    doubleLinkedList_test();
+//    cout << endl << "Stack:##########################" << endl;
+//    stack_test();
+//    cout << endl << "Queue:##########################" << endl;
+//    queue_test();
+//    cout << endl << "Heap:##########################" << endl;
+//    heap_test();
+//    cout << endl << "quick_sort:##########################" << endl;
+//    quick_sort_test();
+//    cout << endl << "BinaryTree:##########################" << endl;
+//    binaryTree_test();
+//    cout << endl << "ThreadedBinaryTree:##########################" << endl;
+//    threadedBinaryTree_test();
+//    cout << endl << "SearchTree:##########################" << endl;
+//    searchTree_test();
+//    cout << endl << "HuffmanTree:##########################" << endl;
+//    huffmanTree_test();
+//    cout << endl << "AVLTree:##########################" << endl;
+//    AVLTree_test();
+//    cout << endl << "Splay:##########################" << endl;
+//    splay_test();
+//    cout << endl << "treap:##########################" << endl;
+//    treap_test();
+//    cout << endl << "KMP:##########################" << endl;
+//    KMP_test();
+//    cout << endl << "dijkstra:##########################" << endl;
+//    dijkstra_test();
+//    cout << endl << "kruskal:##########################" << endl;
+//    kruskal_test();
+    cout << endl << "hierholzer:##########################" << endl;
+    hierholzer_test();
 
     return 0;
+}
+
+void hierholzer_test()
+{
+    std::vector<Hierholzer::Edge<int>> edges[10];
+    Hierholzer::addDoubleEdge(edges, 0, 1, 1);
+    Hierholzer::addDoubleEdge(edges, 1, 2, 1);
+    Hierholzer::addDoubleEdge(edges, 2, 3, 1);
+    Hierholzer::addDoubleEdge(edges, 3, 0, 1);
+    Hierholzer::addDoubleEdge(edges, 2, 4, 1);
+    Hierholzer::addDoubleEdge(edges, 4, 5, 1);
+    Hierholzer::addDoubleEdge(edges, 5, 6, 1);
+    Hierholzer::addDoubleEdge(edges, 6, 2, 1);
+    Hierholzer::addDoubleEdge(edges, 5, 7, 1);
+    Hierholzer::addDoubleEdge(edges, 7, 8, 1);
+    Hierholzer::addDoubleEdge(edges, 8, 9, 1);
+    Hierholzer::addDoubleEdge(edges, 9, 5, 1);
+
+//    std::vector<std::vector<Hierholzer::Edge<int>>> trace = Hierholzer::Hierholzer(0, 7, 8, edges);
+    auto trace = Hierholzer::Hierholzer(0, 9, 12, edges);
+//    auto trace = Hierholzer::Hierholzer<int>();
+
+    cout << 0;
+    for(Hierholzer::Edge<int> edge:trace)
+    {
+        cout << "->" << edge.to;
+    }
+    cout << endl;
 }
 
 void kruskal_test()

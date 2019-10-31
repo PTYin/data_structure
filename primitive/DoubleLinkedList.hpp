@@ -71,13 +71,15 @@ namespace pty
             iterator operator++(int)   // Iterator++
             {
                 iterator tmp = *this;
-                pt = pt->next;
+                if(pt)
+                    pt = pt->next;
                 return tmp;
             }
 
             iterator &operator--()  // --Iterator
             {
-                pt = pt->prev;
+                if(pt)
+                    pt = pt->prev;
                 return *this;
             }
 
@@ -171,13 +173,14 @@ namespace pty
             length = 0;
         }
 
-        void remove(iterator it_node)  // 删除某节点
+        void remove(iterator& it_node)  // 删除某节点
         {
             if (it_node.pt == nullptr) return;
             if (it_node.pt->prev != nullptr)
                 it_node.pt->prev = it_node.pt->next;
             if (it_node.pt->next != nullptr)
                 it_node.pt->next = it_node.pt->prev;
+            it_node++;
         }
 
         bool is_empty() const
@@ -269,7 +272,7 @@ namespace pty
             return *it;
         }
 
-        void modify(iterator it, T _data)  // 修改某一元素
+        void modify(const iterator& it, T _data)  // 修改某一元素
         {
             *it = _data;
         }
@@ -334,8 +337,10 @@ namespace pty
                 return iterator(nullptr);
         }
 
-        void insert_after(iterator it_node, T _data)  // 在某元素之后插入
+        void insert_after(iterator& it_node, T _data)  // 在某元素之后插入
         {
+            if(length == 0)
+                push_back(_data);
             if (it_node.pt == nullptr)
                 return;
             Node *node_ptr = new Node(_data, it_node.pt, it_node.pt->next);
@@ -347,8 +352,10 @@ namespace pty
             length++;
         }
 
-        void insert_before(iterator it_node, T _data)  // 在某元素之前插入
+        void insert_before(iterator& it_node, T _data)  // 在某元素之前插入
         {
+            if(length == 0)
+                push_back(_data);
             if (it_node.pt == nullptr)
                 return;
             Node *node_ptr = new Node(_data, it_node.pt->prev, it_node.pt);

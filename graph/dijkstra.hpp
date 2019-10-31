@@ -12,6 +12,11 @@ const int N = 100000, INF = 0x3f3f3f3f;
 
 namespace pty
 {
+
+    namespace graph
+    {
+
+    }
     namespace dijkstra
     {
         struct Edge

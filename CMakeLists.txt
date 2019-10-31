@@ -20,7 +20,7 @@ set(SRC main.cpp
         tree/Splay.hpp
         tree/RedBlack.hpp
         string/KMP.hpp
-        other/dijkstra.hpp
+        graph/dijkstra.hpp
         primitive/DisjointSet.hpp
-        other/kruskal.hpp)
+        graph/kruskal.hpp graph/Hierholzer.hpp)
 add_executable(usage ${SRC})
