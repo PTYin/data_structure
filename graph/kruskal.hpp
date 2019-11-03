@@ -17,7 +17,7 @@ namespace pty
 //        template <typename Vertex>
 //        DisjointSet::DisjointSets<Vertex> nodes;
 
-        DisjointSet::DisjointSets djs;
+        DisjointSet::DisjointSetsUpgrade djs;
 
         template <typename T, typename Vertex=int>
         struct Edge
