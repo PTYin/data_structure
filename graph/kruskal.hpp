@@ -14,32 +14,20 @@ namespace pty
     namespace kruskal
     {
 
-        template <typename Vertex>
-        DisjointSet::DisjointSets<Vertex> nodes;
+//        template <typename Vertex>
+//        DisjointSet::DisjointSets<Vertex> nodes;
+
+        DisjointSet::DisjointSets djs;
 
         template <typename T, typename Vertex=int>
         struct Edge
         {
-//            DisjointSet::Node<int> from, to;
             Vertex from, to;
             T weight;
             Edge(Vertex _from, Vertex _to, T _weight):from(_from), to(_to),weight(_weight)
             {
-                nodes<Vertex>[from] = std::move(DisjointSet::Node<Vertex>());
-                nodes<Vertex>[to] = std::move(DisjointSet::Node<Vertex>());
+                djs.add({from, to});
             }
-
-//            Edge(const Edge& o) : weight(o.weight),from(o.from.val), to(o.to.val){}  // 拷贝构造函数，必须写
-//
-//            Edge(const Edge&& o) noexcept : weight(o.weight),from(o.from.val), to(o.to.val){}  // 移动构造函数，必须写，否则vector移动元素时会出错
-//
-//            Edge& operator=(const Edge& o)  // 赋值运算符，防止排序的时候把from和to节点的fa属性也给改了
-//            {
-//                weight = o.weight;
-//                from.val = o.from.val;
-//                to.val = o.to.val;
-//                return *this;
-//            }
 
             bool operator<(const Edge& o) const
             {
@@ -79,9 +67,9 @@ namespace pty
             quick_sort_recursive<Edge&>(edges, 0, edges.size()-1);
             for(Edge edge:edges)
             {
-                if(nodes<Vertex>[edge.from].equivalent(nodes<Vertex>[edge.to]))  // 在一个集合里而不是相等
+                if(djs.equivalent(edge.from, edge.to))  // 在一个集合里
                     continue;
-                nodes<Vertex>[edge.from].join(nodes<Vertex>[edge.to]);
+                djs._union(edge.from, edge.to);
                 trace->push_back(edge);
             }
             if(toDelete)

@@ -22,5 +22,5 @@ set(SRC main.cpp
         string/KMP.hpp
         graph/dijkstra.hpp
         primitive/DisjointSet.hpp
-        graph/kruskal.hpp graph/Hierholzer.hpp)
+        graph/kruskal.hpp graph/Hierholzer.hpp graph/prim.hpp other/FFT.hpp)
 add_executable(usage ${SRC})

@@ -18,6 +18,7 @@
 #include "graph/dijkstra.hpp"
 #include "graph/kruskal.hpp"
 #include "graph/Hierholzer.hpp"
+#include "graph/prim.hpp"
 
 using namespace pty;
 using std::cout;
@@ -55,6 +56,8 @@ void kruskal_test();
 
 void hierholzer_test();
 
+void prim_test();
+
 int main()
 {
 //    cout << endl << "DoubleLinkedList:##########################" << endl;
@@ -85,12 +88,40 @@ int main()
 //    KMP_test();
 //    cout << endl << "dijkstra:##########################" << endl;
 //    dijkstra_test();
-//    cout << endl << "kruskal:##########################" << endl;
-//    kruskal_test();
+    cout << endl << "kruskal:##########################" << endl;
+    kruskal_test();
     cout << endl << "hierholzer:##########################" << endl;
     hierholzer_test();
+    cout << endl << "prim:##########################" << endl;
+    prim_test();
 
     return 0;
+}
+
+void prim_test()
+{
+    std::vector<prim::Edge<int>> edges[100];
+    prim::addDoubleEdge(edges, 1, 2, 4);
+    prim::addDoubleEdge(edges, 1, 4, 6);
+    prim::addDoubleEdge(edges, 1, 7, 7);
+    prim::addDoubleEdge(edges, 2, 3, 12);
+    prim::addDoubleEdge(edges, 3, 4, 9);
+    prim::addDoubleEdge(edges, 3, 5, 1);
+    prim::addDoubleEdge(edges, 3, 6, 2);
+    prim::addDoubleEdge(edges, 3, 8, 10);
+    prim::addDoubleEdge(edges, 4, 5, 13);
+    prim::addDoubleEdge(edges, 4, 7, 2);
+    prim::addDoubleEdge(edges, 5, 6, 5);
+    prim::addDoubleEdge(edges, 5, 7, 11);
+    prim::addDoubleEdge(edges, 5, 8, 8);
+    prim::addDoubleEdge(edges, 6, 8, 7);
+    prim::addDoubleEdge(edges, 7, 8, 14);
+    
+    std::vector<prim::Edge<int>> trace = prim::prim(8, 14, 1, edges);
+    for(auto edge:trace)
+    {
+        cout << edge.from << "<->" << edge.to << ": " << edge.weight << endl;
+    }
 }
 
 void hierholzer_test()

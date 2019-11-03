@@ -12,88 +12,40 @@ namespace pty
     {
         using std::map;
 
-        template <typename T>
-        struct Node
-        {
-            T val;
-            Node* fa;
-            Node():fa(this){}
-
-            explicit Node(T _val) : val(_val), fa(this){}
-
-            Node(const Node& o) : fa(this), val(o.val){}
-
-            Node(const Node&& o) : fa(this), val(o.val){}
-
-            Node& operator=(const Node& o)
-            {
-                val = o.val;
-                fa = this;
-                return *this;
-            }
-
-            Node* findRoot()
-            {
-                return fa == this ? this : fa->findRoot();
-            }
-
-            const Node* findRoot() const
-            {
-                return fa == this ? this : (const Node*)fa->findRoot();
-            }
-
-            void join(Node& o)
-            {
-                findRoot()->fa = o.findRoot();
-            }
-
-            bool equivalent(const Node& o) const
-            {
-                return findRoot() == o.findRoot();
-            }
-
-            T value()
-            {
-                return val;
-            }
-
-            Node& operator=(T _value)
-            {
-                val = _value;
-                return *this;
-            }
-
-        };
-
-        template <typename Index, typename Value=Index>
         class DisjointSets
         {
         private:
-            map<Index, Node<Value>> nodes;
+            std::map<int, int> fa;
         public:
-
-            DisjointSets():nodes(){}
-
-            unsigned long long size() const
+            DisjointSets():fa(){}
+            void add(int e)
             {
-                return nodes.size();
+                if(!fa.count(e))
+                    fa[e] = e;
             }
-
-            Node<Index>* begin() const
+            void add(std::initializer_list<int> list)
             {
-                return nodes.begin();
+                for(int e:list)
+                {
+                    add(e);
+                }
             }
-
-            Node<Index>* end() const
+            void clear()
             {
-                return nodes.end();
+                fa.clear();
             }
-
-            Node<Index>& operator[](Index index)
+            int find(int e) const
             {
-                return nodes[index];
+                return e == fa.at(e) ? e : find(fa.at(e));
             }
-
+            bool equivalent(int e1, int e2) const
+            {
+                return find(e1) == find(e2);
+            }
+            void _union(int e1, int e2)
+            {
+                fa[find(e1)] = find(e2);
+            }
         };
     }
 }
