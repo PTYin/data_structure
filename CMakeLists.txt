@@ -22,5 +22,10 @@ set(SRC main.cpp
         string/KMP.hpp
         graph/dijkstra.hpp
         primitive/DisjointSet.hpp
-        graph/kruskal.hpp graph/Hierholzer.hpp graph/prim.hpp other/FFT.hpp)
+        graph/kruskal.hpp
+        graph/Hierholzer.hpp
+        graph/prim.hpp
+        other/FFT.hpp
+        other/GrahamsScan.hpp)
+add_subdirectory(./graphics)
 add_executable(usage ${SRC})

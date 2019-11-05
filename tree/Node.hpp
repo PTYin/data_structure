@@ -75,7 +75,7 @@ namespace pty
         {}
 
     public:
-        T get() const
+        T& get()
         { return value; }
 
         PrimitiveNode *&left()
@@ -169,14 +169,8 @@ namespace pty
 
         friend class ThreadedBinaryTree<T, Node>;
 
-    protected:
-        bool LTag;
-        bool RTag;
-
-        explicit ThreadedNode(const T &_value, void *_father = nullptr, void *_left_child = nullptr,
-                              void *_right_child = nullptr) :
-                PrimitiveNode<T>(_value, _father, _left_child, _right_child), LTag(false), RTag(false)
-        {}
+    public:
+        using PrimitiveNode<T>::get;
 
         ThreadedNode *&fa()
         {
@@ -223,6 +217,14 @@ namespace pty
                 }
             }
         }
+    protected:
+        bool LTag;
+        bool RTag;
+
+        explicit ThreadedNode(const T &_value, void *_father = nullptr, void *_left_child = nullptr,
+                              void *_right_child = nullptr) :
+                PrimitiveNode<T>(_value, _father, _left_child, _right_child), LTag(false), RTag(false)
+        {}
     };
 
     template<typename T>
@@ -247,6 +249,9 @@ namespace pty
         {}
 
     public:
+
+        using PrimitiveNode<T>::get;
+
         AVLTreeNode *&left()
         {
             return (decltype(this) &) this->left_child;
@@ -261,8 +266,6 @@ namespace pty
         {
             return (decltype(this) &) this->father;
         }
-
-        using PrimitiveNode<T>::get;
 
         // 以该节点为根节点进行遍历（前序、中序、后序）
         template<typename F>
@@ -307,13 +310,9 @@ namespace pty
 
         friend class Treap<T, Node>; // TODO
 
-    protected:
-        int key;
-        explicit TreapNode(const T &_value, void *_father = nullptr, void *_left_child = nullptr,
-                             void *_right_child = nullptr) : PrimitiveNode<T>(_value, _father, _left_child,
-                                                                              _right_child),key(rand())
-        {}
+    public:
 
+        using PrimitiveNode<T>::get;
         TreapNode *&left()
         {
             return (decltype(this) &) this->left_child;
@@ -328,8 +327,6 @@ namespace pty
         {
             return (decltype(this) &) this->father;
         }
-
-        using PrimitiveNode<T>::get;
 
         // 以该节点为根节点进行遍历（前序、中序、后序）
         template<typename F>
@@ -361,6 +358,13 @@ namespace pty
                 }
             }
         }
+
+    protected:
+        int key;
+        explicit TreapNode(const T &_value, void *_father = nullptr, void *_left_child = nullptr,
+                             void *_right_child = nullptr) : PrimitiveNode<T>(_value, _father, _left_child,
+                                                                              _right_child),key(rand())
+        {}
 
     };
 

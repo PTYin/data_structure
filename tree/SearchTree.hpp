@@ -215,6 +215,12 @@ namespace pty
             return 1;
         }
 
+
+        using BinaryTree<T, Node>::traversal_pre;
+        using BinaryTree<T, Node>::traversal_in;
+        using BinaryTree<T, Node>::traversal_post;
+        using BinaryTree<T, Node>::traversal_level;
+
         using BinaryTree<T, Node>::clear;
         using BinaryTree<T, Node>::size;
         using BinaryTree<T, Node>::is_empty;
