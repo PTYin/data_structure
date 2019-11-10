@@ -181,6 +181,17 @@ namespace pty
             if (it_node.pt->next != nullptr)
                 it_node.pt->next = it_node.pt->prev;
             it_node++;
+            length--;
+        }
+
+        void remove(iterator&& it_node)  // 删除某节点
+        {
+            if (it_node.pt == nullptr) return;
+            if (it_node.pt->prev != nullptr)
+                it_node.pt->prev = it_node.pt->next;
+            if (it_node.pt->next != nullptr)
+                it_node.pt->next = it_node.pt->prev;
+            length--;
         }
 
         bool is_empty() const
@@ -262,14 +273,14 @@ namespace pty
             }
         }
 
-        T get_by_index(unsigned int index) const  // 根据索引返回数据
+        iterator get_by_index(unsigned int index) const  // 根据索引返回数据
         {
             if (index >= length)
                 throw "Index out of bound!";
             iterator it = it_head;
             while (index--)
                 it++;
-            return *it;
+            return it;
         }
 
         void modify(const iterator& it, T _data)  // 修改某一元素

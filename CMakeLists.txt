@@ -25,7 +25,6 @@ set(SRC main.cpp
         graph/kruskal.hpp
         graph/Hierholzer.hpp
         graph/prim.hpp
-        other/FFT.hpp
-        other/GrahamsScan.hpp)
+        other/FFT.hpp)
 add_subdirectory(./graphics)
 add_executable(usage ${SRC})

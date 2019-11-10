@@ -15,8 +15,10 @@ ELSE(CMAKE_SIZEOF_VOID_P EQUAL 8)  # x86
 ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
 add_executable(SLPF SLPF/core.h SLPF/core.cpp SLPF/main.cpp SLPF/toolkit.hpp)
+add_executable(GrahamsScan GrahamsScan/core.h GrahamsScan/core.cpp GrahamsScan/main.cpp)
 
 target_link_libraries(SLPF freeglut opengl32 glu32)
+target_link_libraries(GrahamsScan freeglut opengl32 glu32)
 
 IF(CMAKE_SIZEOF_VOID_P EQUAL 8)  # x64
     file(COPY freeglut/bin/x64/freeglut.dll DESTINATION ${PROJECT_BINARY_DIR})
