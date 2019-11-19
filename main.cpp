@@ -19,6 +19,7 @@
 #include "graph/kruskal.hpp"
 #include "graph/Hierholzer.hpp"
 #include "graph/prim.hpp"
+#include "graph/FordFulkerson.hpp"
 
 using namespace pty;
 using std::cout;
@@ -58,44 +59,69 @@ void hierholzer_test();
 
 void prim_test();
 
+void FordFulkerson_test();
+
 int main()
 {
-    cout << endl << "DoubleLinkedList:##########################" << endl;
-    doubleLinkedList_test();
-    cout << endl << "Stack:##########################" << endl;
-    stack_test();
-    cout << endl << "Queue:##########################" << endl;
-    queue_test();
-    cout << endl << "Heap:##########################" << endl;
-    heap_test();
-    cout << endl << "quick_sort:##########################" << endl;
-    quick_sort_test();
-    cout << endl << "BinaryTree:##########################" << endl;
-    binaryTree_test();
-    cout << endl << "ThreadedBinaryTree:##########################" << endl;
-    threadedBinaryTree_test();
-    cout << endl << "SearchTree:##########################" << endl;
-    searchTree_test();
-    cout << endl << "HuffmanTree:##########################" << endl;
-    huffmanTree_test();
-    cout << endl << "AVLTree:##########################" << endl;
-    AVLTree_test();
-    cout << endl << "Splay:##########################" << endl;
-    splay_test();
-    cout << endl << "treap:##########################" << endl;
-    treap_test();
-    cout << endl << "KMP:##########################" << endl;
-    KMP_test();
-    cout << endl << "dijkstra:##########################" << endl;
-    dijkstra_test();
-    cout << endl << "kruskal:##########################" << endl;
-    kruskal_test();
-    cout << endl << "hierholzer:##########################" << endl;
-    hierholzer_test();
-    cout << endl << "prim:##########################" << endl;
-    prim_test();
+//    cout << endl << "DoubleLinkedList:##########################" << endl;
+//    doubleLinkedList_test();
+//    cout << endl << "Stack:##########################" << endl;
+//    stack_test();
+//    cout << endl << "Queue:##########################" << endl;
+//    queue_test();
+//    cout << endl << "Heap:##########################" << endl;
+//    heap_test();
+//    cout << endl << "quick_sort:##########################" << endl;
+//    quick_sort_test();
+//    cout << endl << "BinaryTree:##########################" << endl;
+//    binaryTree_test();
+//    cout << endl << "ThreadedBinaryTree:##########################" << endl;
+//    threadedBinaryTree_test();
+//    cout << endl << "SearchTree:##########################" << endl;
+//    searchTree_test();
+//    cout << endl << "HuffmanTree:##########################" << endl;
+//    huffmanTree_test();
+//    cout << endl << "AVLTree:##########################" << endl;
+//    AVLTree_test();
+//    cout << endl << "Splay:##########################" << endl;
+//    splay_test();
+//    cout << endl << "treap:##########################" << endl;
+//    treap_test();
+//    cout << endl << "KMP:##########################" << endl;
+//    KMP_test();
+//    cout << endl << "dijkstra:##########################" << endl;
+//    dijkstra_test();
+//    cout << endl << "kruskal:##########################" << endl;
+//    kruskal_test();
+//    cout << endl << "hierholzer:##########################" << endl;
+//    hierholzer_test();
+//    cout << endl << "prim:##########################" << endl;
+//    prim_test();
+    cout << endl << "FordFulkerson:##########################" << endl;
+    FordFulkerson_test();
 
     return 0;
+}
+
+void FordFulkerson_test()
+{
+    using namespace FordFulkerson;
+    init<int>(4);
+    addEdge(1, 2, 8);
+    addEdge(1, 3, 3);
+    addEdge(2, 3, 1);
+    addEdge(2, 4, 6);
+    addEdge(3, 4, 5);
+    cout << "max flow answer:" << FordFulkerson::FordFulkerson<int>(1, 4) << endl;
+
+    // matching problem
+    std::vector<std::pair<int, int>> graph;
+    graph.emplace_back(1, 6);
+    graph.emplace_back(3, 2);
+    graph.emplace_back(3, 4);
+    graph.emplace_back(3, 6);
+    graph.emplace_back(5, 6);
+    cout << "matching problem answer:" << matching(graph, {1, 3, 5}, {2, 4, 6}) << endl;
 }
 
 void prim_test()
