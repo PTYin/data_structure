@@ -9,9 +9,7 @@
 #include <cstring>
 #include "../primitive/Stack.hpp"
 
-namespace pty
-{
-    namespace Hierholzer
+namespace pty::Hierholzer
     {
         int count = 0;
         bool* visited;
@@ -122,5 +120,4 @@ namespace pty
             return trace;
         }
     }
-}
 #endif //DATA_STRUCTURE_HIERHOLZER_HPP

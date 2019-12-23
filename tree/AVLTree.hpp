@@ -152,8 +152,12 @@ namespace pty
                 {
                     Node *&reference = PARENT_REFERENCE(x);
                     x = reference = rotateAt(tallerChild(tallerChild(x)));
+                }
+                else
+                {
                     updateHeight(x);
                 }
+
             }
             return 1;
         }

@@ -81,8 +81,8 @@ int main()
 //    searchTree_test();
 //    cout << endl << "HuffmanTree:##########################" << endl;
 //    huffmanTree_test();
-//    cout << endl << "AVLTree:##########################" << endl;
-//    AVLTree_test();
+    cout << endl << "AVLTree:##########################" << endl;
+    AVLTree_test();
 //    cout << endl << "Splay:##########################" << endl;
 //    splay_test();
 //    cout << endl << "treap:##########################" << endl;
@@ -97,8 +97,8 @@ int main()
 //    hierholzer_test();
 //    cout << endl << "prim:##########################" << endl;
 //    prim_test();
-    cout << endl << "FordFulkerson:##########################" << endl;
-    FordFulkerson_test();
+//    cout << endl << "FordFulkerson:##########################" << endl;
+//    FordFulkerson_test();
 
     return 0;
 }
@@ -331,6 +331,19 @@ void AVLTree_test()
     std::array<int, 10000> array{};  // 顺序数组
     for(int i = 0; i < 10000; i++)
         array[i] = i;
+
+
+//    std::array<int, 10> array{};
+//    for (unsigned long long i = 0; i < array.size(); i++)
+//        array[i] = i;
+////    unsigned seed = *((unsigned *) (&pos - 4));
+//    // 随机打乱一维数组
+////    std::shuffle(array.begin(), array.end(), std::default_random_engine(seed));
+//    // 从混乱数组中构造搜索树
+//    AVLTree<int> searchTree(array);
+//    searchTree.remove(0);
+//    searchTree.remove(1);
+//    cout << searchTree << endl;
 
     clock_t start = clock();
     AVLTree<int> avl(array);

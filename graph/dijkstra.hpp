@@ -81,7 +81,7 @@ namespace pty
 
                 for(auto edge : edges[node.id])
                 {
-                    if(!visited[edge.to])
+                    if(!visited[edge.to]&&dis[node.id]+edge.weight<dis[edge.to])
                         heap.insert(DiscreteEvent(edge.to, dis[node.id]+edge.weight));
                 }
             }

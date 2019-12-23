@@ -1,3 +1,5 @@
+# Pseudo Code
+[pseudocode/](pseudocode/)
 # Usage
     #include "DoubleLinkedList.hpp"
     #include "Stack.hpp"
